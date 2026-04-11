@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network Monitoring Schedule - Final Master</title>
+    <style>
+        /* Theme Variables */
+        :root {
+            --primary-bg: #004d4d;
+            --accent-color: #008080;
+            --title-color: #002b2b;
+            --header-date-bg: rgba(0, 26, 26, 0.4);
+            --shift-am: #0070c0;
+            --shift-pm: #00b050;
+            --shift-night: #ff0000;
+            --rest-day: #ffc000;
+            --table-border: #888;
+        }
+
+        /* 12 Themes Restored */
+        .theme-default { --primary-bg: #004d4d; --accent-color: #008080; --title-color: #002b2b; --header-date-bg: rgba(0, 15, 15, 0.6); }
+        .theme-midnight { --primary-bg: #1a1a2e; --accent-color: #16213e; --title-color: #0f3460; --header-date-bg: rgba(5, 5, 20, 0.7); }
+        .theme-forest { --primary-bg: #1b4332; --accent-color: #2d6a4f; --title-color: #081c15; --header-date-bg: rgba(5, 20, 10, 0.6); }
+        .theme-purple { --primary-bg: #4a148c; --accent-color: #7b1fa2; --title-color: #311b92; --header-date-bg: rgba(30, 0, 60, 0.6); }
+        .theme-ocean { --primary-bg: #0077b6; --accent-color: #00b4d8; --title-color: #03045e; --header-date-bg: rgba(0, 30, 60, 0.6); }
+        .theme-sunset { --primary-bg: #d00000; --accent-color: #e85d04; --title-color: #370617; --header-date-bg: rgba(60, 0, 0, 0.6); }
+        .theme-wood { --primary-bg: #451a03; --accent-color: #b45309; --title-color: #431407; --header-date-bg: rgba(26, 10, 1, 0.8); }
+        .theme-emerald { --primary-bg: #065f46; --accent-color: #10b981; --title-color: #064e3b; --header-date-bg: rgba(2, 31, 23, 0.7); }
+        .theme-rose { --primary-bg: #9f1239; --accent-color: #fb7185; --title-color: #881337; --header-date-bg: rgba(49, 4, 17, 0.7); }
+        .theme-slate { --primary-bg: #334155; --accent-color: #475569; --title-color: #0f172a; --header-date-bg: rgba(15, 23, 42, 0.7); }
+        .theme-gold { --primary-bg: #854d0e; --accent-color: #eab308; --title-color: #713f12; --header-date-bg: rgba(46, 26, 5, 0.7); }
+        .theme-contrast { --primary-bg: #000000; --accent-color: #333333; --title-color: #000000; --header-date-bg: rgba(255, 255, 255, 0.2); --rest-day: #ffffff; }
+
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; transition: all 0.3s ease; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 320px; background: white; border-right: 1px solid #ddd; padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
+        .theme-container { border: 2px solid #eee; border-radius: 8px; padding: 12px; margin-bottom: 15px; background: #fafafa; }
+        .theme-box-title { font-size: 0.8em; font-weight: 900; color: var(--primary-bg); margin-bottom: 10px; text-align: center; text-transform: uppercase; }
+        .theme-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .theme-item { display: flex; align-items: center; gap: 6px; padding: 5px; background: white; border: 1px solid #eee; border-radius: 4px; cursor: pointer; }
+        .theme-item.active { border-color: var(--primary-bg); box-shadow: 0 0 0 1px var(--primary-bg); }
+        .theme-dot { width: 12px; height: 12px; border-radius: 2px; }
+        .theme-name { font-size: 9px; font-weight: 800; color: #555; text-transform: uppercase; }
+
+        /* Calendar */
+        .calendar-widget thead tr { background: var(--primary-bg); }
+        .calendar-widget th { font-size: 11px; color: white; padding: 6px 0; }
+        .calendar-widget td { text-align: center; padding: 6px 0; cursor: pointer; border-radius: 4px; font-size: 12px; font-weight: 600; border: 1px solid #eee; }
+        .calendar-widget td.active { border: 2px solid var(--primary-bg); font-weight: 900; }
+        .calendar-widget td.today-marker { background-color: var(--primary-bg) !important; color: white !important; font-weight: 900; }
+
+        /* Status Boxes (RD and Holidays) */
+        .status-box { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .status-title { font-size: 0.8em; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; margin-bottom: 5px; }
+        .status-list { padding: 0; margin: 0; list-style: none; }
+        .status-list li { font-size: 0.8em; padding: 4px 8px; background: #f9f9f9; border-left: 3px solid var(--primary-bg); margin-bottom: 3px; font-weight: 700; }
+
+        /* Table Styling */
+        table.schedule-table { width: 100%; border-collapse: collapse; table-layout: fixed; border: 2px solid var(--table-border); }
+        .schedule-table th { background-color: var(--primary-bg); color: white; padding: 8px 0; font-size: 11px; border: 1px solid var(--table-border); }
+        .schedule-table td { border: 1px solid var(--table-border); padding: 12px 4px; text-align: center; font-size: 13px; font-weight: 900; cursor: pointer; position: relative; }
+        .emp-name-cell { text-align: left !important; background: #fafafa; padding-left: 8px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 150px; cursor: default; }
+        .date-sub { display: block; font-size: 11px; background-color: var(--header-date-bg); color: #ffffff; padding: 6px 0; margin: -8px 0 6px 0; font-weight: 900; text-transform: uppercase; }
+
+        .AM { color: var(--shift-am); }
+        .PM { color: var(--shift-pm); }
+        .NIGHT { color: var(--shift-night); }
+        .REST { background-color: var(--rest-day); color: #333; }
+
+        /* Floating Note Tooltip */
+        #notePopup {
+            position: fixed; display: none; pointer-events: none; z-index: 9999;
+            background: var(--primary-bg); color: white; padding: 10px 15px;
+            border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            max-width: 250px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2);
+        }
+        #notePopup b { display: block; border-bottom: 1px solid rgba(255,255,255,0.3); margin-bottom: 6px; font-size: 10px; color: #ffeb3b; text-transform: uppercase; }
+
+        /* Note Indicator */
+        .has-note::after {
+            content: ''; position: absolute; top: 0; right: 0;
+            border-style: solid; border-width: 0 10px 10px 0;
+            border-color: transparent #ffeb3b transparent transparent;
+        }
+
+        /* Main UI */
+        .main-content { flex: 1; padding: 20px 30px; overflow-y: auto; }
+        .main-title { text-align: center; font-size: 1.8em; color: white; background: var(--primary-bg); padding: 12px; margin-bottom: 25px; font-weight: 900; border-radius: 8px; letter-spacing: 2px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 25px; border-top: 5px solid var(--primary-bg); }
+        
+        .clock-container { margin-top: auto; padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #ddd; }
+        #digitalClock { font-size: 1.2em; font-weight: bold; color: var(--primary-bg); font-family: monospace; }
+        .today-btn { background: var(--primary-bg); color: white; border: none; padding: 10px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: 800; margin-bottom: 10px; width: 100%; }
+    </style>
+</head>
+<body class="theme-default">
+
+<div id="notePopup"></div>
+
+<div class="sidebar">
+    <div class="theme-container">
+        <div class="theme-box-title">SYSTEM THEMES</div>
+        <div class="theme-picker">
+            <div class="theme-item active" onclick="setTheme('default', this)"><div class="theme-dot" style="background:#004d4d;"></div><div class="theme-name">Teal</div></div>
+            <div class="theme-item" onclick="setTheme('midnight', this)"><div class="theme-dot" style="background:#1a1a2e;"></div><div class="theme-name">Midnight</div></div>
+            <div class="theme-item" onclick="setTheme('forest', this)"><div class="theme-dot" style="background:#1b4332;"></div><div class="theme-name">Forest</div></div>
+            <div class="theme-item" onclick="setTheme('purple', this)"><div class="theme-dot" style="background:#4a148c;"></div><div class="theme-name">Purple</div></div>
+            <div class="theme-item" onclick="setTheme('ocean', this)"><div class="theme-dot" style="background:#0077b6;"></div><div class="theme-name">Ocean</div></div>
+            <div class="theme-item" onclick="setTheme('sunset', this)"><div class="theme-dot" style="background:#d00000;"></div><div class="theme-name">Sunset</div></div>
+        </div>
+    </div>
+
+    <button class="today-btn" onclick="goToToday()">RETURN TO TODAY</button>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 800; font-size: 12px;">
+        <button onclick="changeMonth(-1)" style="border:none; background:none; cursor:pointer;">❮</button>
+        <span id="monthDisplay"></span>
+        <button onclick="changeMonth(1)" style="border:none; background:none; cursor:pointer;">❯</button>
+    </div>
+    
+    <table class="calendar-widget" style="width:100%; border-collapse:collapse;">
+        <thead><tr><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr></thead>
+        <tbody id="calendarDays"></tbody>
+    </table>
+
+    <div class="status-box">
+        <div class="status-title">🏖️ Rest Day Today</div>
+        <ul id="restDayList" class="status-list"></ul>
+    </div>
+
+    <div class="status-box">
+        <div class="status-title">📅 Holidays</div>
+        <ul id="holidayList" class="status-list"></ul>
+    </div>
+
+    <div class="clock-container">
+        <div id="digitalClock">00:00:00 AM</div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="main-title">NETWORK MONITORING OPERATION CENTER</div>
+    
+    <div class="card">
+        <h2 style="text-align:center; font-size:1.2em; text-transform:uppercase; margin-top:0;">Current Week</h2>
+        <table class="schedule-table"><thead><tr id="headerDates1"></tr></thead><tbody id="scheduleBody1"></tbody></table>
+    </div>
+
+    <div class="card">
+        <h2 style="text-align:center; font-size:1.2em; text-transform:uppercase; margin-top:0;">Following Week</h2>
+        <table class="schedule-table"><thead><tr id="headerDates2"></tr></thead><tbody id="scheduleBody2"></tbody></table>
+    </div>
+    <p style="text-align:center; font-size:11px; color:#999;">💡 Click to add notes. Hover to view notes. Themes update popup color.</p>
+</div>
+
+<script>
+    const employees = ["Jeric Macaspac", "Rodney Cataran", "Jenesis Alamari", "Khen Philip Nierves", "Adriane Allada"];
+    const patterns = {
+        "Jeric Macaspac": [[1,3,1,1,1,2,1],[1,3,1,1,1,1,1],[1,3,0,0,1,1,0],[0,3,0,0,0,0,0],[2,3,2,2,2,2,2]],
+        "Rodney Cataran": [[1,1,1,1,1,1,3],[1,1,0,0,0,1,3],[0,0,0,0,0,0,3],[2,2,2,2,2,2,3],[1,2,1,1,1,1,3]],
+        "Jenesis Alamari": [[2,2,2,2,2,3,2],[2,1,1,1,1,3,1],[1,1,1,1,1,3,1],[1,0,0,0,1,3,1],[0,0,0,0,0,3,0]],
+        "Khen Philip Nierves": [[0,1,0,0,3,1,1],[0,0,0,0,3,0,0],[2,2,2,2,3,2,2],[1,1,1,1,3,1,2],[1,1,1,1,3,1,1]],
+        "Adriane Allada": [[3,0,0,0,0,0,0],[3,2,2,2,2,2,2],[3,1,1,1,2,1,1],[3,1,1,1,1,1,1],[3,1,0,0,1,0,1]]
+    };
+
+    const phHolidays = [
+        { month: 0, day: 1, name: "New Year's Day" }, { month: 1, day: 25, name: "EDSA Revolution" },
+        { month: 3, day: 9, name: "Araw ng Kagitingan" }, { month: 4, day: 1, name: "Labor Day" },
+        { month: 5, day: 12, name: "Independence Day" }, { month: 7, day: 31, name: "National Heroes Day" },
+        { month: 10, day: 1, name: "All Saints' Day" }, { month: 10, day: 30, name: "Bonifacio Day" },
+        { month: 11, day: 25, name: "Christmas Day" }, { month: 11, day: 30, name: "Rizal Day" }
+    ];
+
+    const shiftMap = { 0: { text: "6:00 AM", class: "AM" }, 1: { text: "2:00 PM", class: "PM" }, 2: { text: "10:00 PM", class: "NIGHT" }, 3: { text: "REST DAY", class: "REST" } };
+
+    let currentViewDate = new Date();
+    const startAnchor = new Date(2026, 4, 11); 
+    let selectedDate = new Date();
+    const actualToday = new Date();
+    const popup = document.getElementById('notePopup');
+
+    function setTheme(theme, el) { document.body.className = 'theme-' + theme; document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+    function updateClock() { document.getElementById('digitalClock').innerText = new Date().toLocaleTimeString('en-US', { hour12: true }); }
+    setInterval(updateClock, 1000);
+
+    function renderCalendar() {
+        const year = currentViewDate.getFullYear(); const month = currentViewDate.getMonth();
+        document.getElementById('monthDisplay').innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentViewDate);
+        const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        let html = '<tr>';
+        for (let i = 0; i < firstDay; i++) html += '<td></td>';
+        for (let d = 1; d <= daysInMonth; d++) {
+            if ((firstDay + d - 1) % 7 === 0 && d !== 1) html += '</tr><tr>';
+            const dateObj = new Date(year, month, d);
+            const isToday = actualToday.toDateString() === dateObj.toDateString();
+            const isSelected = selectedDate.toDateString() === dateObj.toDateString();
+            html += `<td class="${isSelected ? 'active' : ''} ${isToday ? 'today-marker' : ''}" onclick="selectDate(${year}, ${month}, ${d})">${d}</td>`;
+        }
+        document.getElementById('calendarDays').innerHTML = html + '</tr>';
+        updateHolidayList();
+    }
+
+    function updateHolidayList() {
+        const list = document.getElementById('holidayList');
+        const hols = phHolidays.filter(h => h.month === currentViewDate.getMonth());
+        list.innerHTML = hols.length ? hols.map(h => `<li>${h.day} - ${h.name}</li>`).join('') : '<li>No holidays</li>';
+    }
+
+    function updateRestDayToday() {
+        const dayOfWeek = (selectedDate.getDay() + 6) % 7;
+        const monday = new Date(selectedDate); monday.setDate(selectedDate.getDate() - dayOfWeek);
+        const weeksElapsed = Math.floor((monday - startAnchor) / (7 * 24 * 60 * 60 * 1000));
+        let pIdx = ((weeksElapsed % 5) + 5) % 5;
+        const list = document.getElementById('restDayList');
+        const rds = employees.filter(emp => patterns[emp][pIdx][dayOfWeek] === 3);
+        list.innerHTML = rds.length ? rds.map(emp => `<li>${emp.toUpperCase()}</li>`).join('') : '<li>Nobody</li>';
+    }
+
+    function selectDate(y, m, d) { selectedDate = new Date(y, m, d); renderCalendar(); updateSchedules(); }
+    function changeMonth(dir) { currentViewDate.setMonth(currentViewDate.getMonth() + dir); renderCalendar(); }
+    function goToToday() { currentViewDate = new Date(); selectedDate = new Date(); renderCalendar(); updateSchedules(); }
+
+    function handleHover(e, text) { popup.style.display = 'block'; popup.innerHTML = `<b>Note Preview</b> ${text || '<i>Click to edit</i>'}`; movePopup(e); }
+    function movePopup(e) { popup.style.left = (e.clientX + 15) + 'px'; popup.style.top = (e.clientY + 15) + 'px'; }
+    function hidePopup() { popup.style.display = 'none'; }
+
+    function editNote(emp, dateStr) {
+        const key = `note_${emp}_${dateStr}`;
+        const val = prompt(`Attendance note for ${emp}:`, localStorage.getItem(key) || "");
+        if (val !== null) { if (!val.trim()) localStorage.removeItem(key); else localStorage.setItem(key, val); updateSchedules(); }
+    }
+
+    function renderWeek(mondayDate, suffix) {
+        const weeksElapsed = Math.floor((mondayDate - startAnchor) / (7 * 24 * 60 * 60 * 1000));
+        let pIdx = ((weeksElapsed % 5) + 5) % 5;
+        let headerHtml = '<th style="width:150px;">NAME</th>';
+        const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+        let weekDates = [];
+        for(let i=0; i<7; i++) {
+            let d = new Date(mondayDate); d.setDate(mondayDate.getDate() + i);
+            weekDates.push(d.toDateString());
+            headerHtml += `<th><span class="date-sub">${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>${days[i]}</th>`;
+        }
+        document.getElementById(`headerDates${suffix}`).innerHTML = headerHtml;
+        const tbody = document.getElementById(`scheduleBody${suffix}`); tbody.innerHTML = '';
+        employees.forEach(emp => {
+            let row = document.createElement('tr');
+            row.innerHTML = `<td class="emp-name-cell">${emp.toUpperCase()}</td>`;
+            patterns[emp][pIdx].forEach((s, idx) => {
+                let cell = document.createElement('td');
+                let dStr = weekDates[idx];
+                let note = localStorage.getItem(`note_${emp}_${dStr}`);
+                cell.className = shiftMap[s].class + (note ? ' has-note' : '');
+                cell.innerText = shiftMap[s].text;
+                cell.onmouseenter = (e) => handleHover(e, note);
+                cell.onmousemove = movePopup;
+                cell.onmouseleave = hidePopup;
+                cell.onclick = () => editNote(emp, dStr);
+                row.appendChild(cell);
+            });
+            tbody.appendChild(row);
+        });
+    }
+
+    function updateSchedules() {
+        const day = selectedDate.getDay(); const diff = selectedDate.getDate() - (day === 0 ? 6 : day - 1);
+        const m1 = new Date(selectedDate); m1.setDate(diff);
+        const m2 = new Date(m1); m2.setDate(m1.getDate() + 7);
+        renderWeek(m1, "1"); renderWeek(m2, "2");
+        updateRestDayToday();
+    }
+
+    goToToday();
+</script>
+</body>
+</html>
