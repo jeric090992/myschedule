@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Network Monitoring Schedule - Fixed Colors</title>
+    <title>Network Monitoring Schedule - 10 Themes & Notes</title>
     <style>
         /* Theme Variables */
         :root {
@@ -33,7 +33,6 @@
             --border-light: #333333;
             --name-cell-bg: #252525;
             --header-date-bg: rgba(0, 0, 0, 0.5);
-            /* Brighter colors for Dark Mode */
             --shift-am: #4db8ff;
             --shift-pm: #2ecc71;
             --shift-night: #ff4d4d;
@@ -87,11 +86,23 @@
             width: 130px !important; font-weight: 800; font-size: 11px !important; color: var(--text-main);
         }
 
-        /* Shift Color Fix - Added !important to override dark/light modes */
+        /* Shift Colors */
         .AM { color: var(--shift-am) !important; }
         .PM { color: var(--shift-pm) !important; }
         .NIGHT { color: var(--shift-night) !important; }
         .REST { background-color: var(--rest-day) !important; color: #333 !important; }
+
+        /* Note Indicator */
+        .has-note::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 4px;
+            height: 4px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+        }
 
         .on-duty-glow { background-color: var(--primary-bg) !important; color: white !important; animation: pulse-glow 2s infinite; }
         @keyframes pulse-glow { 0% { box-shadow: inset 0 0 3px var(--glow-color); } 50% { box-shadow: inset 0 0 12px var(--glow-color); } 100% { box-shadow: inset 0 0 3px var(--glow-color); } }
@@ -146,11 +157,11 @@
 <div class="main-content">
     <div class="main-title">NETWORK MONITORING OPERATION CENTER</div>
     <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0;">Current Week Schedule</h2>
+        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Current Week Schedule</h2>
         <table class="schedule-table"><thead><tr id="headerDates1"></tr></thead><tbody id="scheduleBody1"></tbody></table>
     </div>
     <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0;">Following Week Schedule</h2>
+        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Following Week Schedule</h2>
         <table class="schedule-table"><thead><tr id="headerDates2"></tr></thead><tbody id="scheduleBody2"></tbody></table>
     </div>
 </div>
@@ -222,24 +233,56 @@
     function changeMonth(d) { currentViewDate.setMonth(currentViewDate.getMonth()+d); renderCalendar(); }
     function goToToday() { currentViewDate = new Date(); selectedDate = new Date(); renderCalendar(); updateSchedules(); }
 
+    /* NOTE SYSTEM FUNCTIONS */
+    function editNote(emp, dateStr) {
+        const key = `note_${emp}_${dateStr}`;
+        const existingNote = localStorage.getItem(key) || "";
+        const newNote = prompt(`Add note for ${emp} on ${dateStr}:`, existingNote);
+        
+        if (newNote !== null) {
+            if (newNote.trim() === "") {
+                localStorage.removeItem(key);
+            } else {
+                localStorage.setItem(key, newNote.trim());
+            }
+            updateSchedules();
+        }
+    }
+
     function renderWeek(mon, suf) {
         const pIdx = ((Math.floor((mon-startAnchor)/(7*24*60*60*1000))%5)+5)%5;
         let hd = '<th style="width:130px;">NAME</th>';
         const days = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
+        const weekDates = [];
+        
         for(let i=0; i<7; i++) {
             let d = new Date(mon); d.setDate(mon.getDate()+i);
+            weekDates.push(d.toDateString());
             hd += `<th><span class="date-sub">${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>${days[i]}</th>`;
         }
         document.getElementById(`headerDates${suf}`).innerHTML = hd;
+        
         const tb = document.getElementById(`scheduleBody${suf}`); tb.innerHTML = '';
         employees.forEach(emp => {
             let r = document.createElement('tr');
-            const isTW = new Date().toDateString() === mon.toDateString() || (new Date()>mon && new Date()<new Date(mon.getTime()+7*24*60*60*1000));
-            const nc = document.createElement('td'); nc.className = 'emp-name-cell'; nc.innerText = emp.toUpperCase(); nc.setAttribute('data-name', emp); nc.setAttribute('data-today', isTW);
+            const isTodayWeek = new Date().toDateString() === mon.toDateString() || (new Date() > mon && new Date() < new Date(mon.getTime() + 7*24*60*60*1000));
+            
+            const nc = document.createElement('td'); 
+            nc.className = 'emp-name-cell'; 
+            nc.innerText = emp.toUpperCase(); 
+            nc.setAttribute('data-name', emp); 
+            nc.setAttribute('data-today', isTodayWeek);
             r.appendChild(nc);
-            patterns[emp][pIdx].forEach((s) => {
+            
+            patterns[emp][pIdx].forEach((s, idx) => {
+                const dateStr = weekDates[idx];
+                const note = localStorage.getItem(`note_${emp}_${dateStr}`);
+                
                 let c = document.createElement('td');
-                c.className = shiftMap[s].class; c.innerText = shiftMap[s].text;
+                c.className = shiftMap[s].class + (note ? ' has-note' : ''); 
+                c.innerText = shiftMap[s].text;
+                c.title = note || ""; // Hover to see note
+                c.onclick = () => editNote(emp, dateStr); // Click to edit note
                 r.appendChild(c);
             });
             tb.appendChild(r);
@@ -255,6 +298,7 @@
         document.getElementById('restDayList').innerHTML = rds.length ? rds.map(e => `<li>${e.toUpperCase()}</li>`).join('') : '<li>Nobody</li>';
         highlightCurrentDuty(new Date());
     }
+
     goToToday();
 </script>
 </body>
