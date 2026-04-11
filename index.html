@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Network Monitoring Schedule - 10 Themes</title>
+    <title>Network Monitoring Schedule - 10 Themes & Dark Mode</title>
     <style>
         /* Theme Variables */
         :root {
             --primary-bg: #004d4d;
             --accent-color: #008080;
-            --title-color: #002b2b;
             --header-date-bg: rgba(0, 26, 26, 0.4);
             --shift-am: #0070c0;
             --shift-pm: #00b050;
@@ -16,68 +15,101 @@
             --rest-day: #ffc000;
             --table-border: #888;
             --glow-color: #2ecc71;
+            /* Default Light Mode Colors */
+            --body-bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-main: #333333;
+            --border-light: #dddddd;
+            --name-cell-bg: #fafafa;
         }
 
-        /* 10 Themes Configuration */
-        .theme-default { --primary-bg: #004d4d; --accent-color: #008080; --header-date-bg: rgba(0, 15, 15, 0.6); }
-        .theme-midnight { --primary-bg: #1a1a2e; --accent-color: #16213e; --header-date-bg: rgba(5, 5, 20, 0.7); }
-        .theme-forest { --primary-bg: #1b4332; --accent-color: #2d6a4f; --header-date-bg: rgba(5, 20, 10, 0.6); }
-        .theme-purple { --primary-bg: #4a148c; --accent-color: #7b1fa2; --header-date-bg: rgba(30, 0, 60, 0.6); }
-        .theme-ocean { --primary-bg: #0077b6; --accent-color: #00b4d8; --header-date-bg: rgba(0, 30, 60, 0.6); }
-        .theme-sunset { --primary-bg: #d00000; --accent-color: #e85d04; --header-date-bg: rgba(60, 0, 0, 0.6); }
-        /* 4 New Themes */
-        .theme-rose { --primary-bg: #880e4f; --accent-color: #ad1457; --header-date-bg: rgba(60, 0, 30, 0.6); }
-        .theme-slate { --primary-bg: #263238; --accent-color: #37474f; --header-date-bg: rgba(20, 30, 35, 0.6); }
-        .theme-gold { --primary-bg: #b8860b; --accent-color: #daa520; --header-date-bg: rgba(60, 40, 0, 0.6); }
-        .theme-neon { --primary-bg: #0f0f0f; --accent-color: #39ff14; --header-date-bg: rgba(0, 0, 0, 0.8); --table-border: #39ff14; }
+        /* Dark Mode Overrides */
+        body.dark-mode {
+            --body-bg: #121212;
+            --card-bg: #1e1e1e;
+            --sidebar-bg: #181818;
+            --text-main: #e0e0e0;
+            --border-light: #333333;
+            --name-cell-bg: #252525;
+            --header-date-bg: rgba(0, 0, 0, 0.5);
+        }
 
-        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; height: 100vh; background: #f0f2f5; transition: all 0.3s ease; overflow: hidden; }
+        /* 10 Themes */
+        .theme-default { --primary-bg: #004d4d; --accent-color: #008080; }
+        .theme-midnight { --primary-bg: #1a1a2e; --accent-color: #16213e; }
+        .theme-forest { --primary-bg: #1b4332; --accent-color: #2d6a4f; }
+        .theme-purple { --primary-bg: #4a148c; --accent-color: #7b1fa2; }
+        .theme-ocean { --primary-bg: #0077b6; --accent-color: #00b4d8; }
+        .theme-sunset { --primary-bg: #d00000; --accent-color: #e85d04; }
+        .theme-rose { --primary-bg: #880e4f; --accent-color: #ad1457; }
+        .theme-slate { --primary-bg: #263238; --accent-color: #37474f; }
+        .theme-gold { --primary-bg: #b8860b; --accent-color: #daa520; }
+        .theme-neon { --primary-bg: #0f0f0f; --accent-color: #39ff14; --table-border: #39ff14; }
+
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--body-bg); color: var(--text-main); transition: all 0.3s ease; overflow: hidden; }
         
-        .sidebar { width: 300px; background: white; border-right: 1px solid #ddd; padding: 15px; display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar { width: 300px; background: var(--sidebar-bg); border-right: 1px solid var(--border-light); padding: 15px; display: flex; flex-direction: column; overflow-y: auto; transition: background 0.3s; }
         
         .theme-section-title { 
             font-size: 11px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; 
             margin: 5px 0 12px 0; letter-spacing: 1.5px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .theme-section-title::before, .theme-section-title::after { content: ""; flex: 1; height: 1px; background: #eee; }
+        .theme-section-title::before, .theme-section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-light); }
 
-        .theme-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-bottom: 20px; }
-        .theme-item { display: flex; align-items: center; gap: 5px; padding: 6px; background: #fafafa; border: 1px solid #eee; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .theme-item.active { border-color: var(--primary-bg); background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Dark Mode Toggle Button */
+        .dark-toggle-btn {
+            background: var(--text-main);
+            color: var(--body-bg);
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .theme-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-bottom: 15px; }
+        .theme-item { display: flex; align-items: center; gap: 5px; padding: 6px; background: var(--name-cell-bg); border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; }
+        .theme-item.active { border-color: var(--primary-bg); background: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .theme-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .theme-name { font-size: 8px; font-weight: 800; text-transform: uppercase; color: #444; }
+        .theme-name { font-size: 8px; font-weight: 800; text-transform: uppercase; color: var(--text-main); }
 
-        #monthDisplay { font-size: 13px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; letter-spacing: 1px; }
+        #monthDisplay { font-size: 13px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; }
         .calendar-widget th { font-size: 10px; color: white; padding: 4px 0; background: var(--primary-bg); }
-        .calendar-widget td { text-align: center; padding: 4px 0; cursor: pointer; font-size: 11px; font-weight: 600; border: 1px solid #eee; }
+        .calendar-widget td { text-align: center; padding: 4px 0; cursor: pointer; font-size: 11px; font-weight: 600; border: 1px solid var(--border-light); color: var(--text-main); }
         .calendar-widget td.today-marker { background-color: var(--primary-bg) !important; color: white !important; }
 
-        .status-box { margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
+        .status-box { margin-top: 10px; border-top: 1px solid var(--border-light); padding-top: 8px; }
         .status-title { font-size: 0.75em; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; }
-        .status-list li { font-size: 0.75em; padding: 2px 6px; background: #f9f9f9; border-left: 3px solid var(--primary-bg); margin-bottom: 2px; font-weight: 700; list-style: none; }
+        .status-list li { font-size: 0.75em; padding: 2px 6px; background: var(--name-cell-bg); border-left: 3px solid var(--primary-bg); margin-bottom: 2px; font-weight: 700; list-style: none; }
 
         table.schedule-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--table-border); table-layout: fixed; }
         .schedule-table th { background-color: var(--primary-bg); color: white; padding: 6px 2px; font-size: 9px; border: 1px solid var(--table-border); }
-        .schedule-table td { border: 1px solid var(--table-border); padding: 8px 2px; text-align: center; font-size: 11px; font-weight: 900; position: relative; cursor: pointer; }
+        .schedule-table td { border: 1px solid var(--table-border); padding: 8px 2px; text-align: center; font-size: 11px; font-weight: 900; position: relative; cursor: pointer; color: var(--text-main); }
         
         .emp-name-cell { 
-            text-align: left !important; background: #fafafa; padding-left: 8px !important; white-space: nowrap !important; 
-            overflow: hidden; text-overflow: ellipsis; width: 130px !important; font-weight: 800; font-size: 11px !important;
+            text-align: left !important; background: var(--name-cell-bg) !important; padding-left: 8px !important; 
+            width: 130px !important; font-weight: 800; font-size: 11px !important; color: var(--text-main);
         }
 
         .on-duty-glow { background-color: var(--primary-bg) !important; color: white !important; animation: pulse-glow 2s infinite; }
         @keyframes pulse-glow { 0% { box-shadow: inset 0 0 3px var(--glow-color); } 50% { box-shadow: inset 0 0 12px var(--glow-color); } 100% { box-shadow: inset 0 0 3px var(--glow-color); } }
 
         .date-sub { display: block; font-size: 9px; background-color: var(--header-date-bg); color: #ffffff; padding: 2px 0; margin: -6px 0 2px 0; font-weight: 900; }
-        .AM { color: var(--shift-am); } .PM { color: var(--shift-pm); } .NIGHT { color: var(--shift-night); } .REST { background-color: var(--rest-day); color: #333; }
+        .AM { color: var(--shift-am); } .PM { color: var(--shift-pm); } .NIGHT { color: var(--shift-night); } 
+        .REST { background-color: var(--rest-day); color: #333 !important; }
 
-        .clock-container { margin-top: auto; padding: 8px; background: #f8f9fa; border-radius: 6px; text-align: center; border: 1px solid #ddd; }
+        .clock-container { margin-top: auto; padding: 8px; background: var(--name-cell-bg); border-radius: 6px; text-align: center; border: 1px solid var(--border-light); }
         #digitalClock { font-size: 1.1em; font-weight: bold; color: var(--primary-bg); font-family: monospace; }
         .today-btn { background: var(--primary-bg); color: white; border: none; padding: 8px; border-radius: 15px; cursor: pointer; font-size: 10px; font-weight: 800; margin-bottom: 12px; width: 100%; }
 
         .main-content { flex: 1; padding: 15px 20px; overflow-y: auto; overflow-x: auto; }
         .main-title { text-align: center; font-size: 1.4em; color: white; background: var(--primary-bg); padding: 10px; margin-bottom: 15px; font-weight: 900; border-radius: 6px; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 15px; border-top: 4px solid var(--primary-bg); min-width: 850px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 4px solid var(--primary-bg); min-width: 850px; transition: background 0.3s; }
     </style>
 </head>
 <body class="theme-default">
@@ -99,6 +131,8 @@
         <div class="theme-item" onclick="setTheme('gold', this)"><div class="theme-dot" style="background:#b8860b;"></div><div class="theme-name">Gold</div></div>
         <div class="theme-item" onclick="setTheme('neon', this)"><div class="theme-dot" style="background:#39ff14;"></div><div class="theme-name">Neon</div></div>
     </div>
+
+    <button class="dark-toggle-btn" id="darkToggle" onclick="toggleDarkMode()">🌙 Switch to Dark Mode</button>
     
     <button class="today-btn" onclick="goToToday()">RETURN TO TODAY</button>
     
@@ -122,17 +156,17 @@
 <div class="main-content">
     <div class="main-title">NETWORK MONITORING OPERATION CENTER</div>
     <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0;">Current Week Schedule</h2>
+        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Current Week Schedule</h2>
         <table class="schedule-table"><thead><tr id="headerDates1"></tr></thead><tbody id="scheduleBody1"></tbody></table>
     </div>
     <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0;">Following Week Schedule</h2>
+        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Following Week Schedule</h2>
         <table class="schedule-table"><thead><tr id="headerDates2"></tr></thead><tbody id="scheduleBody2"></tbody></table>
     </div>
 </div>
 
 <script>
-    // Scripts stay the same
+    // System Variables
     const employees = ["Jeric Macaspac", "Rodney Cataran", "Jenesis Alamari", "Khen Philip Nierves", "Adriane Allada"];
     const patterns = {
         "Jeric Macaspac": [[1,3,1,1,1,2,1],[1,3,1,1,1,1,1],[1,3,0,0,1,1,0],[0,3,0,0,0,0,0],[2,3,2,2,2,2,2]],
@@ -145,14 +179,34 @@
     const shiftMap = {0:{text:"6AM",class:"AM"},1:{text:"2PM",class:"PM"},2:{text:"10PM",class:"NIGHT"},3:{text:"REST",class:"REST"}};
     const startAnchor = new Date(2026, 4, 11); 
     let currentViewDate = new Date(), selectedDate = new Date();
+    let isDark = false;
 
-    function setTheme(t, el) { document.body.className = 'theme-'+t; document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
-    function updateClock() { const now = new Date(); document.getElementById('digitalClock').innerText = now.toLocaleTimeString('en-US', { hour12: true }); highlightCurrentDuty(now); }
+    // Functions
+    function toggleDarkMode() {
+        isDark = !isDark;
+        document.body.classList.toggle('dark-mode', isDark);
+        document.getElementById('darkToggle').innerText = isDark ? "☀️ Switch to Light Mode" : "🌙 Switch to Dark Mode";
+    }
+
+    function setTheme(t, el) { 
+        const currentTheme = document.body.className.split(' ').find(c => c.startsWith('theme-'));
+        document.body.classList.replace(currentTheme, 'theme-'+t);
+        document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active')); 
+        el.classList.add('active'); 
+    }
+
+    function updateClock() { 
+        const now = new Date(); 
+        document.getElementById('digitalClock').innerText = now.toLocaleTimeString('en-US', { hour12: true }); 
+        highlightCurrentDuty(now); 
+    }
     setInterval(updateClock, 1000);
 
     function highlightCurrentDuty(now) {
-        const hr = now.getHours(); let cs = (hr>=6&&hr<14)?0:(hr>=14&&hr<22)?1:2;
-        const dow = (now.getDay()+6)%7; const mon = new Date(now); mon.setDate(now.getDate()-dow);
+        const hr = now.getHours(); 
+        let cs = (hr>=6&&hr<14)?0:(hr>=14&&hr<22)?1:2;
+        const dow = (now.getDay()+6)%7; 
+        const mon = new Date(now); mon.setDate(now.getDate()-dow);
         const pIdx = ((Math.floor((mon-startAnchor)/(7*24*60*60*1000))%5)+5)%5;
         document.querySelectorAll('.emp-name-cell').forEach(c => {
             const e = c.getAttribute('data-name');
@@ -180,14 +234,13 @@
     function selectDate(y,m,d) { selectedDate = new Date(y,m,d); renderCalendar(); updateSchedules(); }
     function changeMonth(d) { currentViewDate.setMonth(currentViewDate.getMonth()+d); renderCalendar(); }
     function goToToday() { currentViewDate = new Date(); selectedDate = new Date(); renderCalendar(); updateSchedules(); }
-    function editNote(e, d) { const v = prompt(`Note:`, localStorage.getItem(`note_${e}_${d}`)||""); if (v!==null) { if (!v.trim()) localStorage.removeItem(`note_${e}_${d}`); else localStorage.setItem(`note_${e}_${d}`,v); updateSchedules(); } }
 
     function renderWeek(mon, suf) {
         const pIdx = ((Math.floor((mon-startAnchor)/(7*24*60*60*1000))%5)+5)%5;
         let hd = '<th style="width:130px;">NAME</th>';
-        const days = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"], wDs = [];
+        const days = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
         for(let i=0; i<7; i++) {
-            let d = new Date(mon); d.setDate(mon.getDate()+i); wDs.push(d.toDateString());
+            let d = new Date(mon); d.setDate(mon.getDate()+i);
             hd += `<th><span class="date-sub">${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>${days[i]}</th>`;
         }
         document.getElementById(`headerDates${suf}`).innerHTML = hd;
@@ -197,10 +250,10 @@
             const isTW = new Date().toDateString() === mon.toDateString() || (new Date()>mon && new Date()<new Date(mon.getTime()+7*24*60*60*1000));
             const nc = document.createElement('td'); nc.className = 'emp-name-cell'; nc.innerText = emp.toUpperCase(); nc.setAttribute('data-name', emp); nc.setAttribute('data-today', isTW);
             r.appendChild(nc);
-            patterns[emp][pIdx].forEach((s, idx) => {
-                let c = document.createElement('td'); let dStr = wDs[idx], n = localStorage.getItem(`note_${emp}_${dStr}`);
-                c.className = shiftMap[s].class + (n ? ' has-note' : ''); c.innerText = shiftMap[s].text;
-                c.onclick = () => editNote(emp, dStr); r.appendChild(c);
+            patterns[emp][pIdx].forEach((s) => {
+                let c = document.createElement('td');
+                c.className = shiftMap[s].class; c.innerText = shiftMap[s].text;
+                r.appendChild(c);
             });
             tb.appendChild(r);
         });
@@ -215,6 +268,8 @@
         document.getElementById('restDayList').innerHTML = rds.length ? rds.map(e => `<li>${e.toUpperCase()}</li>`).join('') : '<li>Nobody</li>';
         highlightCurrentDuty(new Date());
     }
+
+    // Initialize
     goToToday();
 </script>
 </body>
