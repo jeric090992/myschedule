@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Network Monitoring Schedule - Click Highlight</title>
+    <title>Network Monitoring Schedule - Secure Login</title>
     <style>
-        /* Theme Variables */
+        /* Existing Theme Variables */
         :root {
             --primary-bg: #004d4d;
             --accent-color: #008080;
@@ -15,7 +15,6 @@
             --rest-day: #ffc000;
             --table-border: #888;
             --glow-color: #2ecc71;
-            /* Light Mode */
             --body-bg: #f0f2f5;
             --card-bg: #ffffff;
             --sidebar-bg: #ffffff;
@@ -24,7 +23,6 @@
             --name-cell-bg: #fafafa;
         }
 
-        /* Dark Mode Overrides */
         body.dark-mode {
             --body-bg: #121212;
             --card-bg: #1e1e1e;
@@ -32,13 +30,65 @@
             --text-main: #e0e0e0;
             --border-light: #333333;
             --name-cell-bg: #252525;
-            --header-date-bg: rgba(0, 0, 0, 0.5);
-            --shift-am: #4db8ff;
-            --shift-pm: #2ecc71;
-            --shift-night: #ff4d4d;
         }
 
-        /* 10 Themes */
+        /* Login Overlay Styling */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: 0.5s;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 350px;
+            text-align: center;
+        }
+
+        .login-card h2 { color: var(--primary-bg); margin-bottom: 20px; font-family: sans-serif; }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .btn-admin { background: var(--primary-bg); color: white; }
+        .btn-viewer { background: #666; color: white; margin-top: 5px !important; }
+
+        /* Main App hidden initially */
+        #mainApp { display: none; }
+        
+        /* Logout Button */
+        .logout-btn {
+            background: #ff4d4d; color: white; border: none; padding: 8px;
+            border-radius: 8px; cursor: pointer; font-size: 10px;
+            font-weight: 900; margin-top: 10px; width: 100%; text-transform: uppercase;
+        }
+
+        /* Existing Dashboard Styles (Condensed for brevity) */
         .theme-default { --primary-bg: #004d4d; --accent-color: #008080; }
         .theme-midnight { --primary-bg: #1a1a2e; --accent-color: #16213e; }
         .theme-forest { --primary-bg: #1b4332; --accent-color: #2d6a4f; }
@@ -51,60 +101,38 @@
         .theme-neon { --primary-bg: #0f0f0f; --accent-color: #39ff14; --table-border: #39ff14; }
 
         body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; height: 100vh; background: var(--body-bg); color: var(--text-main); transition: all 0.3s ease; overflow: hidden; }
-        
         .sidebar { width: 300px; background: var(--sidebar-bg); border-right: 1px solid var(--border-light); padding: 15px; display: flex; flex-direction: column; overflow-y: auto; }
-        
-        .theme-section-title { 
-            font-size: 11px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; 
-            margin: 5px 0 12px 0; letter-spacing: 1.5px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        .theme-section-title { font-size: 11px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; margin: 5px 0 12px 0; letter-spacing: 1.5px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .theme-section-title::before, .theme-section-title::after { content: ""; flex: 1; height: 1px; background: var(--border-light); }
-
         .dark-toggle-btn { background: var(--text-main); color: var(--body-bg); border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 10px; font-weight: 900; margin-bottom: 15px; width: 100%; text-transform: uppercase; }
-
         .theme-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-bottom: 15px; }
         .theme-item { display: flex; align-items: center; gap: 5px; padding: 6px; background: var(--name-cell-bg); border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; }
         .theme-item.active { border-color: var(--primary-bg); background: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .theme-dot { width: 10px; height: 10px; border-radius: 50%; }
         .theme-name { font-size: 8px; font-weight: 800; text-transform: uppercase; color: var(--text-main); }
-
         #monthDisplay { font-size: 13px; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; }
         .calendar-widget th { font-size: 10px; color: white; padding: 4px 0; background: var(--primary-bg); }
         .calendar-widget td { text-align: center; padding: 4px 0; cursor: pointer; font-size: 11px; font-weight: 600; border: 1px solid var(--border-light); color: var(--text-main); transition: 0.2s; }
-        
-        /* DATE HIGHLIGHT - Eto ang binago */
         .calendar-widget td.active { background-color: var(--primary-bg) !important; color: white !important; font-weight: 900; border-radius: 4px; transform: scale(1.1); box-shadow: 0 0 8px var(--primary-bg); }
         .calendar-widget td.today-marker { border: 2px solid var(--primary-bg); color: var(--primary-bg); }
-
         .status-box { margin-top: 10px; border-top: 1px solid var(--border-light); padding-top: 8px; }
         .status-title { font-size: 0.75em; font-weight: 900; color: var(--primary-bg); text-transform: uppercase; }
         .status-list li { font-size: 0.75em; padding: 2px 6px; background: var(--name-cell-bg); border-left: 3px solid var(--primary-bg); margin-bottom: 2px; font-weight: 700; list-style: none; }
-
         table.schedule-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--table-border); table-layout: fixed; }
         .schedule-table th { background-color: var(--primary-bg); color: white; padding: 6px 2px; font-size: 9px; border: 1px solid var(--table-border); }
         .schedule-table td { border: 1px solid var(--table-border); padding: 8px 2px; text-align: center; font-size: 11px; font-weight: 900; position: relative; cursor: pointer; }
-        
-        .emp-name-cell { 
-            text-align: left !important; background: var(--name-cell-bg) !important; padding-left: 8px !important; 
-            width: 130px !important; font-weight: 800; font-size: 11px !important; color: var(--text-main);
-        }
-
+        .emp-name-cell { text-align: left !important; background: var(--name-cell-bg) !important; padding-left: 8px !important; width: 130px !important; font-weight: 800; font-size: 11px !important; color: var(--text-main); }
         .AM { color: var(--shift-am) !important; }
         .PM { color: var(--shift-pm) !important; }
         .NIGHT { color: var(--shift-night) !important; }
         .REST { background-color: var(--rest-day) !important; color: #333 !important; }
-
         .has-note::after { content: ""; position: absolute; top: 2px; right: 2px; width: 4px; height: 4px; background-color: var(--text-main); border-radius: 50%; }
-
         .on-duty-glow { background-color: var(--primary-bg) !important; color: white !important; animation: pulse-glow 2s infinite; }
         @keyframes pulse-glow { 0% { box-shadow: inset 0 0 3px var(--glow-color); } 50% { box-shadow: inset 0 0 12px var(--glow-color); } 100% { box-shadow: inset 0 0 3px var(--glow-color); } }
-
         .date-sub { display: block; font-size: 9px; background-color: var(--header-date-bg); color: #ffffff; padding: 2px 0; margin: -6px 0 2px 0; font-weight: 900; }
-
         .clock-container { margin-top: auto; padding: 8px; background: var(--name-cell-bg); border-radius: 6px; text-align: center; border: 1px solid var(--border-light); }
         #digitalClock { font-size: 1.1em; font-weight: bold; color: var(--primary-bg); font-family: monospace; }
         .today-btn { background: var(--primary-bg); color: white; border: none; padding: 8px; border-radius: 15px; cursor: pointer; font-size: 10px; font-weight: 800; margin-bottom: 12px; width: 100%; }
-
         .main-content { flex: 1; padding: 15px 20px; overflow-y: auto; overflow-x: auto; }
         .main-title { text-align: center; font-size: 1.4em; color: white; background: var(--primary-bg); padding: 10px; margin-bottom: 15px; font-weight: 900; border-radius: 6px; }
         .card { background: var(--card-bg); padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 4px solid var(--primary-bg); min-width: 850px; }
@@ -112,53 +140,98 @@
 </head>
 <body class="theme-default">
 
-<div class="sidebar">
-    <div class="theme-section-title">Choose Theme Color</div>
-    <div class="theme-picker">
-        <div class="theme-item active" onclick="setTheme('default', this)"><div class="theme-dot" style="background:#004d4d;"></div><div class="theme-name">Teal</div></div>
-        <div class="theme-item" onclick="setTheme('midnight', this)"><div class="theme-dot" style="background:#1a1a2e;"></div><div class="theme-name">Midnight</div></div>
-        <div class="theme-item" onclick="setTheme('forest', this)"><div class="theme-dot" style="background:#1b4332;"></div><div class="theme-name">Forest</div></div>
-        <div class="theme-item" onclick="setTheme('purple', this)"><div class="theme-dot" style="background:#4a148c;"></div><div class="theme-name">Purple</div></div>
-        <div class="theme-item" onclick="setTheme('ocean', this)"><div class="theme-dot" style="background:#0077b6;"></div><div class="theme-name">Ocean</div></div>
-        <div class="theme-item" onclick="setTheme('sunset', this)"><div class="theme-dot" style="background:#d00000;"></div><div class="theme-name">Sunset</div></div>
-        <div class="theme-item" onclick="setTheme('rose', this)"><div class="theme-dot" style="background:#880e4f;"></div><div class="theme-name">Rose</div></div>
-        <div class="theme-item" onclick="setTheme('slate', this)"><div class="theme-dot" style="background:#263238;"></div><div class="theme-name">Slate</div></div>
-        <div class="theme-item" onclick="setTheme('gold', this)"><div class="theme-dot" style="background:#b8860b;"></div><div class="theme-name">Gold</div></div>
-        <div class="theme-item" onclick="setTheme('neon', this)"><div class="theme-dot" style="background:#39ff14;"></div><div class="theme-name">Neon</div></div>
+<div id="loginOverlay">
+    <div class="login-card">
+        <h2>NMOC LOGIN</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="btn-admin" onclick="attemptLogin()">LOGIN AS ADMIN</button>
+        <button class="btn-viewer" onclick="loginAsViewer()">CONTINUE AS VIEWER</button>
+        <p id="loginError" style="color:red; font-size: 12px; margin-top:10px; display:none;">Invalid Credentials</p>
     </div>
-
-    <button class="dark-toggle-btn" id="darkToggle" onclick="toggleDarkMode()">🌙 Switch to Dark Mode</button>
-    <button class="today-btn" onclick="goToToday()">RETURN TO TODAY</button>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin: 5px 0; padding-bottom: 5px;">
-        <button onclick="changeMonth(-1)" style="border:none; background:none; cursor:pointer; font-weight:bold; color:var(--primary-bg);">❮</button>
-        <span id="monthDisplay"></span>
-        <button onclick="changeMonth(1)" style="border:none; background:none; cursor:pointer; font-weight:bold; color:var(--primary-bg);">❯</button>
-    </div>
-    
-    <table class="calendar-widget" style="width:100%; border-collapse:collapse;">
-        <thead><tr><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr></thead>
-        <tbody id="calendarDays"></tbody>
-    </table>
-    
-    <div class="status-box"><div class="status-title">🏖️ Rest Day Today</div><ul id="restDayList" class="status-list"></ul></div>
-    <div class="status-box"><div class="status-title">📅 Holidays</div><ul id="holidayList" class="status-list"></ul></div>
-    <div class="clock-container"><div id="digitalClock">00:00:00 AM</div></div>
 </div>
 
-<div class="main-content">
-    <div class="main-title">NETWORK MONITORING OPERATION CENTER</div>
-    <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Current Week Schedule</h2>
-        <table class="schedule-table"><thead><tr id="headerDates1"></tr></thead><tbody id="scheduleBody1"></tbody></table>
+<div id="mainApp" style="width: 100%; display: flex;">
+    <div class="sidebar">
+        <div class="theme-section-title">Choose Theme Color</div>
+        <div class="theme-picker">
+            <div class="theme-item active" onclick="setTheme('default', this)"><div class="theme-dot" style="background:#004d4d;"></div><div class="theme-name">Teal</div></div>
+            <div class="theme-item" onclick="setTheme('midnight', this)"><div class="theme-dot" style="background:#1a1a2e;"></div><div class="theme-name">Midnight</div></div>
+            <div class="theme-item" onclick="setTheme('forest', this)"><div class="theme-dot" style="background:#1b4332;"></div><div class="theme-name">Forest</div></div>
+            <div class="theme-item" onclick="setTheme('purple', this)"><div class="theme-dot" style="background:#4a148c;"></div><div class="theme-name">Purple</div></div>
+            <div class="theme-item" onclick="setTheme('ocean', this)"><div class="theme-dot" style="background:#0077b6;"></div><div class="theme-name">Ocean</div></div>
+            <div class="theme-item" onclick="setTheme('sunset', this)"><div class="theme-dot" style="background:#d00000;"></div><div class="theme-name">Sunset</div></div>
+            <div class="theme-item" onclick="setTheme('rose', this)"><div class="theme-dot" style="background:#880e4f;"></div><div class="theme-name">Rose</div></div>
+            <div class="theme-item" onclick="setTheme('slate', this)"><div class="theme-dot" style="background:#263238;"></div><div class="theme-name">Slate</div></div>
+            <div class="theme-item" onclick="setTheme('gold', this)"><div class="theme-dot" style="background:#b8860b;"></div><div class="theme-name">Gold</div></div>
+            <div class="theme-item" onclick="setTheme('neon', this)"><div class="theme-dot" style="background:#39ff14;"></div><div class="theme-name">Neon</div></div>
+        </div>
+
+        <button class="dark-toggle-btn" id="darkToggle" onclick="toggleDarkMode()">🌙 Switch to Dark Mode</button>
+        <button class="today-btn" onclick="goToToday()">RETURN TO TODAY</button>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 5px 0; padding-bottom: 5px;">
+            <button onclick="changeMonth(-1)" style="border:none; background:none; cursor:pointer; font-weight:bold; color:var(--primary-bg);">❮</button>
+            <span id="monthDisplay"></span>
+            <button onclick="changeMonth(1)" style="border:none; background:none; cursor:pointer; font-weight:bold; color:var(--primary-bg);">❯</button>
+        </div>
+        
+        <table class="calendar-widget" style="width:100%; border-collapse:collapse;">
+            <thead><tr><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th></tr></thead>
+            <tbody id="calendarDays"></tbody>
+        </table>
+        
+        <div class="status-box"><div class="status-title">🏖️ Rest Day Today</div><ul id="restDayList" class="status-list"></ul></div>
+        <div class="status-box"><div class="status-title">📅 Holidays</div><ul id="holidayList" class="status-list"></ul></div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="clock-container"><div id="digitalClock">00:00:00 AM</div></div>
     </div>
-    <div class="card">
-        <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Following Week Schedule</h2>
-        <table class="schedule-table"><thead><tr id="headerDates2"></tr></thead><tbody id="scheduleBody2"></tbody></table>
+
+    <div class="main-content">
+        <div class="main-title">NETWORK MONITORING OPERATION CENTER</div>
+        <div class="card">
+            <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Current Week Schedule</h2>
+            <table class="schedule-table"><thead><tr id="headerDates1"></tr></thead><tbody id="scheduleBody1"></tbody></table>
+        </div>
+        <div class="card">
+            <h2 style="text-align:center; font-size:0.9em; text-transform:uppercase; margin:0 0 10px 0; color:var(--text-main);">Following Week Schedule</h2>
+            <table class="schedule-table"><thead><tr id="headerDates2"></tr></thead><tbody id="scheduleBody2"></tbody></table>
+        </div>
     </div>
 </div>
 
 <script>
+    let currentUserRole = null; // 'admin' or 'viewer'
+
+    function attemptLogin() {
+        const u = document.getElementById('username').value;
+        const p = document.getElementById('password').value;
+        if (u === "Jeric09" && p === "Jeric09") {
+            successLogin('admin');
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    }
+
+    function loginAsViewer() {
+        successLogin('viewer');
+    }
+
+    function successLogin(role) {
+        currentUserRole = role;
+        document.getElementById('loginOverlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            goToToday(); // Initialize dashboard
+        }, 500);
+    }
+
+    function logout() {
+        location.reload(); // Simple way to reset state
+    }
+
+    // --- EXISTING LOGIC ---
     const employees = ["Jeric Macaspac", "Rodney Cataran", "Jenesis Alamari", "Khen Philip Nierves", "Adriane Allada"];
     const patterns = {
         "Jeric Macaspac": [[1,3,1,1,1,2,1],[1,3,1,1,1,1,1],[1,3,0,0,1,1,0],[0,3,0,0,0,0,0],[2,3,2,2,2,2,2]],
@@ -183,7 +256,7 @@
         document.body.classList.replace(currentTheme, 'theme-'+t);
         document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active')); 
         el.classList.add('active'); 
-        renderCalendar(); // Rerender to apply new primary color to active date
+        renderCalendar();
     }
 
     function updateClock() { 
@@ -228,6 +301,7 @@
     function goToToday() { currentViewDate = new Date(); selectedDate = new Date(); renderCalendar(); updateSchedules(); }
 
     function editNote(emp, dateStr) {
+        if (currentUserRole !== 'admin') return; // Viewers can't edit
         const key = `note_${emp}_${dateStr}`;
         const existingNote = localStorage.getItem(key) || "";
         const newNote = prompt(`Add note for ${emp} on ${dateStr}:`, existingNote);
@@ -262,7 +336,11 @@
                 c.className = shiftMap[s].class + (note ? ' has-note' : ''); 
                 c.innerText = shiftMap[s].text;
                 c.title = note || "";
-                c.onclick = () => editNote(emp, dateStr);
+                if (currentUserRole === 'admin') {
+                    c.onclick = () => editNote(emp, dateStr);
+                } else {
+                    c.style.cursor = 'default';
+                }
                 r.appendChild(c);
             });
             tb.appendChild(r);
@@ -278,7 +356,6 @@
         document.getElementById('restDayList').innerHTML = rds.length ? rds.map(e => `<li>${e.toUpperCase()}</li>`).join('') : '<li>Nobody</li>';
         highlightCurrentDuty(new Date());
     }
-    goToToday();
 </script>
 </body>
 </html>
