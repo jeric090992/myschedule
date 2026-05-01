@@ -499,7 +499,7 @@ function downloadPNG() {
     html2canvas(tableContainer, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#f0f2f5",
+        backgroundColor: getComputedStyle(document.body).backgroundColor,
         logging: false,
         ignoreElements: (el) => el.classList.contains('no-export')
     }).then(canvas => {
