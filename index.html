@@ -313,11 +313,10 @@ function resetToToday() {
 
 let users=JSON.parse(localStorage.getItem('nmoc_db')) || [
     { name: "Jeric09", pass: "Jeric09", role: "Admin" },
-    { name: "Zeus08", pass: "Zeus08", role: "Admin" },
-    { name: "Zeus", role: "Viewer" },
-    { name: "Paulo", role: "Viewer" },
-    { name: "Jason", role: "Viewer" },
-    { name: "Benedict", role: "Viewer" },
+    { name: "Zeus Garcia", role: "Viewer" },
+    { name: "Paulo Alforja", role: "Viewer" },
+    { name: "Jason Menorca", role: "Viewer" },
+    { name: "Benedict Martin", role: "Viewer" },
     { name: "Gino", role: "Viewer" },
     { name: "Laarni", role: "Viewer" },
     { name: "Khen", role: "Viewer" },
@@ -332,15 +331,22 @@ function setTheme(t) {
 
 function login() {
     const u=document.getElementById('userIn').value,
-          p=document.getElementById('passIn').value;
+          p=document.getElementById('passIn').value,
+          err=document.getElementById('loginError');
+    err.innerText = "";
     const found=users.find(x=> x.name===u);
     if (found) {
-        if (found.role==='Admin' && p !==found.pass) return;
+        if (found.pass && p !== found.pass) {
+            err.innerText = "Invalid Password";
+            return;
+        }
         currentUser=found;
         document.getElementById('loginOverlay').style.display='none';
         document.getElementById('dashboard').style.display='flex';
         if(found.role==='Admin') document.getElementById('adminLink').style.display='block';
         renderAll();
+    } else {
+        err.innerText = "User not found";
     }
 }
 
