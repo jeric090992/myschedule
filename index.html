@@ -40,6 +40,60 @@
             --border: #444;
         }
 
+        body.theme-royal {
+            --primary: #8e44ad;
+            --primary-dark: #5b2c6f;
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --text: #e94560;
+            --border: #0f3460;
+        }
+
+        body.theme-nature {
+            --primary: #27ae60;
+            --primary-dark: #1e8449;
+            --bg: #f1f8e9;
+            --card: #ffffff;
+            --text: #2e7d32;
+            --border: #c8e6c9;
+        }
+
+        body.theme-sunset {
+            --primary: #e67e22;
+            --primary-dark: #a04000;
+            --bg: #fff5e6;
+            --card: #ffffff;
+            --text: #d35400;
+            --border: #f5cba7;
+        }
+
+        body.theme-ocean {
+            --primary: #16a085;
+            --primary-dark: #0e6251;
+            --bg: #e0f2f1;
+            --card: #ffffff;
+            --text: #00796b;
+            --border: #b2dfdb;
+        }
+
+        body.theme-midnight {
+            --primary: #34495e;
+            --primary-dark: #212f3d;
+            --bg: #000000;
+            --card: #1a1a1a;
+            --text: #ecf0f1;
+            --border: #2c3e50;
+        }
+
+        body.theme-forest {
+            --primary: #196f3d;
+            --primary-dark: #145a32;
+            --bg: #e8f5e9;
+            --card: #ffffff;
+            --text: #1b5e20;
+            --border: #a5d6a7;
+        }
+
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
@@ -119,7 +173,7 @@
         /* Updated Theme Grid */
         .theme-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
             margin-bottom: 15px;
         }
@@ -326,8 +380,14 @@
     <div id="dashboard">
         <div class="sidebar no-export"><button class="royal-btn">🚀 DASHBOARD HOME</button>
             <div class="theme-grid">
-                <div class="theme-btn" style="background:#5dade2; color:#fff;" onclick="setTheme('light')">LIGHT</div>
-                <div class="theme-btn" style="background:#1a1a2e; color:#fff;" onclick="setTheme('dark')">DARK</div>
+                <div class="theme-btn" style="background:#5dade2; color:#fff;" onclick="setTheme('light')">LIT</div>
+                <div class="theme-btn" style="background:#1a1a2e; color:#fff;" onclick="setTheme('dark')">DRK</div>
+                <div class="theme-btn" style="background:#8e44ad; color:#fff;" onclick="setTheme('royal')">RYL</div>
+                <div class="theme-btn" style="background:#27ae60; color:#fff;" onclick="setTheme('nature')">NAT</div>
+                <div class="theme-btn" style="background:#e67e22; color:#fff;" onclick="setTheme('sunset')">SNT</div>
+                <div class="theme-btn" style="background:#16a085; color:#fff;" onclick="setTheme('ocean')">OCN</div>
+                <div class="theme-btn" style="background:#34495e; color:#fff;" onclick="setTheme('midnight')">MID</div>
+                <div class="theme-btn" style="background:#196f3d; color:#fff;" onclick="setTheme('forest')">FRT</div>
             </div><button id="adminLink" class="royal-btn admin-btn" onclick="openAdmin()" style="display:none;">🛠
                 ADMIN PANEL</button><button class="royal-btn" style="background:#27ae60;" onclick="toggleView()"
                 id="viewBtn">Switch to Cut-off View</button><button class="royal-btn" style="background:#c0392b;"
