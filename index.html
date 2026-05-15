@@ -769,13 +769,13 @@
                 for(let i=0; i<6; i++) {
                     tableHTML += `<tr>
                         <td style="border: 1px solid #000; padding: 0; background: #fff;">
-                            <input type="text" id="holidayName_${i}" placeholder="" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;" oninput="localStorage.setItem('admin_holidayName_${i}', this.value)">
+                            <input type="text" id="holidayName_${i}" placeholder="" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;">
                         </td>
                         <td style="border: 1px solid #000; padding: 0; background: #fff;">
-                            <input type="text" id="holidayTime_${i}" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;" oninput="localStorage.setItem('admin_holidayTime_${i}', this.value)">
+                            <input type="text" id="holidayTime_${i}" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;">
                         </td>
                         <td style="border: 1px solid #000; padding: 0; background: #fff;">
-                            <input type="text" id="holidayRemarks_${i}" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;" oninput="localStorage.setItem('admin_holidayRemarks_${i}', this.value)">
+                            <input type="text" id="holidayRemarks_${i}" style="width: 100%; padding: 4px; border: none; background: transparent; box-sizing: border-box; font-size: 12px; color: #000; font-weight: bold; text-align: center;">
                         </td>
                     </tr>`;
                 }
@@ -796,39 +796,33 @@
                 const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
                 document.getElementById('dutyTimeTitle').innerText = `${monthNames[selectedHol.m]} ${selectedHol.d < 10 ? '0' + selectedHol.d : selectedHol.d}, ${selectedHol.n.toUpperCase()}`;
                 
-                // Set readonly based on Admin role
                 const isAdmin = currentUser && currentUser.role === 'Admin';
+                const hKey = `hol_${year}_${month}_${selectedHol.d}`;
+
                 for (let i = 0; i < 6; i++) {
                     const ni = document.getElementById(`holidayName_${i}`);
                     const ti = document.getElementById(`holidayTime_${i}`);
                     const ri = document.getElementById(`holidayRemarks_${i}`);
-                    if (ni) ni.readOnly = !isAdmin;
-                    if (ti) ti.readOnly = !isAdmin;
-                    if (ri) ri.readOnly = !isAdmin;
+                    
+                    if (ni) {
+                        ni.readOnly = !isAdmin;
+                        ni.value = localStorage.getItem(`${hKey}_n_${i}`) || "";
+                        ni.oninput = (e) => localStorage.setItem(`${hKey}_n_${i}`, e.target.value);
+                    }
+                    if (ti) {
+                        ti.readOnly = !isAdmin;
+                        ti.value = localStorage.getItem(`${hKey}_t_${i}`) || "";
+                        ti.oninput = (e) => localStorage.setItem(`${hKey}_t_${i}`, e.target.value);
+                    }
+                    if (ri) {
+                        ri.readOnly = !isAdmin;
+                        ri.value = localStorage.getItem(`${hKey}_r_${i}`) || "";
+                        ri.oninput = (e) => localStorage.setItem(`${hKey}_r_${i}`, e.target.value);
+                    }
                 }
             } else {
                 timeBoxCont.style.display = 'none';
             }
-
-            setTimeout(() => {
-                for(let i=0; i<6; i++) {
-                    const nameInput = document.getElementById(`holidayName_${i}`);
-                    const timeInput = document.getElementById(`holidayTime_${i}`);
-                    const remarksInput = document.getElementById(`holidayRemarks_${i}`);
-                    if (nameInput) {
-                        const savedName = localStorage.getItem(`admin_holidayName_${i}`);
-                        if (savedName !== null) nameInput.value = savedName;
-                    }
-                    if (timeInput) {
-                        const savedTime = localStorage.getItem(`admin_holidayTime_${i}`);
-                        if (savedTime !== null) timeInput.value = savedTime;
-                    }
-                    if (remarksInput) {
-                        const savedRemarks = localStorage.getItem(`admin_holidayRemarks_${i}`);
-                        if (savedRemarks !== null) remarksInput.value = savedRemarks;
-                    }
-                }
-            }, 0);
         }
 
         function renderAll() {
