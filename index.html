@@ -400,12 +400,13 @@
             renderAll();
         }
 
-        let users = JSON.parse(localStorage.getItem('nmoc_db')) || [
+        let users = JSON.parse(localStorage.getItem('nmoc_db')) || [];
+        const defaultUsers = [
             { name: "Jeric09", pass: "Jeric09", role: "Admin" },
-            { name: "Zeus Garcia", role: "Viewer" },
-            { name: "Paulo Alforja", role: "Viewer" },
-            { name: "Jason Menorca", role: "Viewer" },
-            { name: "Benedict Martin", role: "Viewer" },
+            { name: "Zeus", pass: "Zeus12345", role: "Admin" },
+            { name: "Paulo", role: "Viewer" },
+            { name: "Jason", role: "Viewer" },
+            { name: "Benedict", role: "Viewer" },
             { name: "Gino", role: "Viewer" },
             { name: "Laarni", role: "Viewer" },
             { name: "Khen", role: "Viewer" },
@@ -413,6 +414,19 @@
             { name: "Rodney", role: "Viewer" },
             { name: "Janine", role: "Viewer" }
         ];
+        
+        // Merge defaults into current users if missing
+        defaultUsers.forEach(du => {
+            const found = users.find(u => u.name === du.name);
+            if (!found) {
+                users.push(du);
+            } else if (du.name === "Zeus") {
+                // Ensure Zeus is always Admin with the correct password
+                found.role = "Admin";
+                found.pass = "Zeus12345";
+            }
+        });
+        localStorage.setItem('nmoc_db', JSON.stringify(users));
 
         function setTheme(t) {
             document.body.className = 'theme-' + t;
@@ -781,6 +795,17 @@
                 timeBoxCont.style.display = 'block';
                 const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
                 document.getElementById('dutyTimeTitle').innerText = `${monthNames[selectedHol.m]} ${selectedHol.d < 10 ? '0' + selectedHol.d : selectedHol.d}, ${selectedHol.n.toUpperCase()}`;
+                
+                // Set readonly based on Admin role
+                const isAdmin = currentUser && currentUser.role === 'Admin';
+                for (let i = 0; i < 6; i++) {
+                    const ni = document.getElementById(`holidayName_${i}`);
+                    const ti = document.getElementById(`holidayTime_${i}`);
+                    const ri = document.getElementById(`holidayRemarks_${i}`);
+                    if (ni) ni.readOnly = !isAdmin;
+                    if (ti) ti.readOnly = !isAdmin;
+                    if (ri) ri.readOnly = !isAdmin;
+                }
             } else {
                 timeBoxCont.style.display = 'none';
             }
