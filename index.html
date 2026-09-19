@@ -660,15 +660,15 @@
             </button>
 
             <div class="period-display" id="period-label">
-                August 17 – August 23, 2026
+                September 14 – September 20, 2026
             </div>
 
             <button class="ctrl-btn" onclick="nextPeriod()" id="btn-next" title="Next Period">
                 Next ▶
             </button>
 
-            <button class="ctrl-btn" onclick="goToTargetDate()" title="Jump to Demo Week (August 17, 2026)">
-                🎯 Aug 17, 2026
+            <button class="ctrl-btn" onclick="goToTargetDate()" title="Jump to Target Week (September 14, 2026)">
+                🎯 Sep 14, 2026
             </button>
             <button class="ctrl-btn" onclick="goToToday()" title="Current Period">
                 ▶ Today
@@ -801,12 +801,52 @@ const EDGE_REST_DAYS = {
     leric: 4     // Thursday
 };
 
-// Core Patterns (5-week cycle anchored May 4, 2026; Aug 17, 2026 is Week 0)
+// Core Patterns (4-week rotation cycle anchored September 14, 2026 as Pattern 1)
 const CORE_PATTERNS = {
-    "jeric":   [[2, 3, 2, 2, 2, 2, 2], [1, 3, 1, 1, 1, 2, 1], [1, 3, 1, 1, 1, 1, 1], [1, 3, 0, 0, 1, 1, 0], [0, 3, 0, 0, 0, 0, 0]],
-    "rodney":  [[1, 2, 1, 1, 1, 1, 3], [1, 1, 1, 1, 1, 1, 3], [0, 1, 0, 0, 1, 1, 3], [0, 0, 0, 0, 0, 0, 3], [2, 2, 2, 2, 2, 2, 3]],
-    "jenesis": [[0, 0, 0, 0, 0, 3, 0], [2, 2, 2, 2, 2, 3, 2], [1, 1, 1, 1, 2, 3, 1], [1, 1, 1, 1, 1, 3, 1], [1, 0, 0, 0, 1, 3, 1]],
-    "adriane": [[3, 1, 1, 1, 1, 1, 1], [3, 1, 0, 0, 0, 1, 1], [3, 0, 0, 0, 0, 0, 0], [3, 2, 2, 2, 2, 2, 2], [3, 1, 1, 1, 1, 1, 2]]
+    "jeric": [
+        [2, 3, 2, 2, 2, 2, 2], // Pattern 1: Sep 14-20 (Night, Tue RD)
+        [1, 3, 1, 1, 1, 2, 1], // Pattern 2: Sep 21-27 (Afternoon, Tue RD, Sat 10PM-6AM RELIEVER)
+        [1, 3, 1, 1, 1, 1, 0], // Pattern 3: Sep 28-Oct 4 (Afternoon, Tue RD, Sun 6AM-2PM RELIEVER)
+        [0, 3, 0, 0, 0, 0, 0]  // Pattern 4: Oct 5-Oct 11 (Morning, Tue RD)
+    ],
+    "rodney": [
+        [1, 2, 1, 1, 1, 1, 3], // Pattern 1: Sep 14-20 (Afternoon, Tue 10PM-6AM RELIEVER, Sun RD)
+        [0, 1, 1, 1, 1, 1, 3], // Pattern 2: Sep 21-27 (Afternoon, Mon 6AM-2PM RELIEVER, Sun RD)
+        [0, 0, 0, 0, 0, 0, 3], // Pattern 3: Sep 28-Oct 4 (Morning, Sun RD)
+        [2, 2, 2, 2, 2, 2, 3]  // Pattern 4: Oct 5-Oct 11 (Night, Sun RD)
+    ],
+    "jenesis": [
+        [0, 0, 0, 0, 0, 3, 0], // Pattern 1: Sep 14-20 (Morning, Sat RD)
+        [2, 2, 2, 2, 2, 3, 2], // Pattern 2: Sep 21-27 (Night, Sat RD)
+        [2, 1, 1, 1, 1, 3, 1], // Pattern 3: Sep 28-Oct 4 (Afternoon, Mon 10PM-6AM RELIEVER, Sat RD)
+        [1, 0, 1, 1, 1, 3, 1]  // Pattern 4: Oct 5-Oct 11 (Afternoon, Tue 6AM-2PM RELIEVER, Sat RD)
+    ],
+    "adriane": [
+        [3, 1, 1, 1, 1, 0, 1], // Pattern 1: Sep 14-20 (Mon RD, Sat 6AM-2PM RELIEVER)
+        [3, 0, 0, 0, 0, 0, 0], // Pattern 2: Sep 21-27 (Mon RD, Morning)
+        [3, 2, 2, 2, 2, 2, 2], // Pattern 3: Sep 28-Oct 4 (Mon RD, Night)
+        [3, 1, 1, 1, 1, 1, 2]  // Pattern 4: Oct 5-Oct 11 (Mon RD, Sun 10PM-6AM RELIEVER)
+    ]
+};
+
+// Reliever mapping for Core Rest Days: [pIdx][dayIdx] = { restUser, relieverUser }
+const CORE_RELIEVERS = {
+    0: {
+        1: { restUser: "jeric", relieverUser: "RODNEY" },   // Tue: Jeric RD -> Rodney
+        5: { restUser: "jenesis", relieverUser: "ADRIANE" } // Sat: Jenesis RD -> Adriane
+    },
+    1: {
+        0: { restUser: "adriane", relieverUser: "RODNEY" }, // Mon: Adriane RD -> Rodney
+        5: { restUser: "jenesis", relieverUser: "JERIC" }   // Sat: Jenesis RD -> Jeric
+    },
+    2: {
+        0: { restUser: "adriane", relieverUser: "JENESIS" },// Mon: Adriane RD -> Jenesis
+        6: { restUser: "rodney", relieverUser: "JERIC" }    // Sun: Rodney RD -> Jeric
+    },
+    3: {
+        1: { restUser: "jeric", relieverUser: "JENESIS" },  // Tue: Jeric RD -> Jenesis
+        6: { restUser: "rodney", relieverUser: "ADRIANE" }  // Sun: Rodney RD -> Adriane
+    }
 };
 
 const rotationStart = new Date(2026, 8, 11); // September 11, 2026
@@ -817,8 +857,8 @@ rotationStart.setHours(0, 0, 0, 0);
 ============================================================ */
 let viewMode = "cutoff"; // Default to "cutoff" as requested, or "week", "month"
 let sectionFilter = "all"; // "all", "core", "edge"
-// Default to August 17, 2026
-let currentDate = new Date(2026, 7, 17);
+// Default to September 14, 2026
+let currentDate = new Date(2026, 8, 14);
 
 function getMonday(d) {
     const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -913,9 +953,9 @@ function getZeusShift(date) {
 function getCoreShift(staffKey, date) {
     if (staffKey === "zeus") return getZeusShift(date);
 
-    const anchor = new Date(2026, 4, 4); // May 4, 2026
+    const anchor = new Date(2026, 8, 14); // September 14, 2026 (Pattern 1)
     const diffWeeks = Math.floor((date - anchor) / (7 * 24 * 60 * 60 * 1000));
-    const pIdx = ((diffWeeks % 5) + 5) % 5;
+    const pIdx = ((diffWeeks % 4) + 4) % 4;
     const dayIdx = (date.getDay() + 6) % 7; // 0=Mon, ..., 6=Sun
 
     const pat = CORE_PATTERNS[staffKey];
@@ -923,14 +963,22 @@ function getCoreShift(staffKey, date) {
 
     const code = pat[pIdx][dayIdx];
 
-    // Rest Days & Reliever names
-    if (code === 3) {
-        let relName = "";
-        if (staffKey === "jeric") relName = "RODNEY";
-        else if (staffKey === "jenesis") relName = "ADRIANE";
-        else if (staffKey === "adriane") relName = "RODNEY";
-        else if (staffKey === "rodney") relName = "ADRIANE";
+    // Check reliever assignment for this week & day
+    const dayReliever = CORE_RELIEVERS[pIdx]?.[dayIdx];
+    let relName = "";
+    let isReliever = false;
 
+    if (dayReliever) {
+        if (dayReliever.restUser === staffKey) {
+            relName = dayReliever.relieverUser;
+        }
+        if (dayReliever.relieverUser === staffKey.toUpperCase()) {
+            isReliever = true;
+        }
+    }
+
+    // Rest Days
+    if (code === 3) {
         return {
             type: "rest",
             reliever: relName,
@@ -939,7 +987,6 @@ function getCoreShift(staffKey, date) {
     }
 
     if (code === 2) { // 10PM-6AM
-        const isReliever = (staffKey === "rodney" && dayIdx === 1); // Rodney covers Jeric on Tuesday
         return {
             type: "badge",
             badgeClass: "night",
@@ -951,10 +998,9 @@ function getCoreShift(staffKey, date) {
             type: "badge",
             badgeClass: "afternoon",
             timeText: "2PM-10PM",
-            subText: "(AFTERNOON)"
+            subText: isReliever ? "(RELIEVER)" : "(AFTERNOON)"
         };
     } else if (code === 0) { // 6AM-2PM
-        const isReliever = (staffKey === "adriane" && dayIdx === 5); // Adriane covers Jenesis on Saturday
         return {
             type: "badge",
             badgeClass: "morning",
@@ -1206,7 +1252,7 @@ function nextPeriod() {
 }
 
 function goToTargetDate() {
-    currentDate = new Date(2026, 7, 17); // August 17, 2026
+    currentDate = new Date(2026, 8, 14); // September 14, 2026
     renderTable();
 }
 
