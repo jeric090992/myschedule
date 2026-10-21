@@ -240,6 +240,7 @@
             align-items: center;
             gap: 7px;
             user-select: none;
+            text-decoration: none;
         }
 
         .btn-schedule {
@@ -1200,11 +1201,9 @@
             </div>
 
             <div class="toolbar-actions">
-                <a href="https://jeric090992.github.io/myschedule" 
-                   target="_blank" 
-                   rel="noopener noreferrer" 
+                <a href="schedule.html" 
                    class="btn btn-schedule" 
-                   title="Open My Schedule (https://jeric090992.github.io/myschedule)">
+                   title="Open Network Monitoring Schedule (schedule.html)">
                     <i class="fa-solid fa-calendar-days"></i> My Schedule
                     <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10.5px; margin-left: 3px; opacity: 0.85;"></i>
                 </a>
@@ -1530,7 +1529,6 @@
             }
 
             // Load attendance data with automatic status migration:
-            // Old "LT" -> "L" (Late), Old "L" -> "VL" (Vacation Leave)
             let savedData = localStorage.getItem(STORAGE_DATA_KEY);
             if (!savedData) {
                 const oldData = localStorage.getItem("AMS_ATTENDANCE_DATA_V5") || localStorage.getItem("AMS_ATTENDANCE_DATA");
@@ -1817,8 +1815,6 @@
                     }
 
                     // ── Per-person attendance calculation ──────────────────────
-                    // Duty days = P + L + A + VL + HD  (excludes RD, HDty, HND)
-                    // Present value: P = 1.0, L = 1.0 (Late is 100% Present), HD = 0.5
                     const dutyDays   = countP + countL + countA + countVL + countHD;
                     const presentVal = countP + countL + (countHD * 0.5);
                     const pDisplay   = (presentVal % 1 === 0) ? presentVal.toFixed(0) : presentVal.toFixed(1);
@@ -2149,16 +2145,6 @@
         /* ============================================================
            8. STAFF MANAGEMENT MODAL
         ============================================================ */
-        function resetStaffToDefault() {
-            if (confirm("Restore the default 12 staff members (Core & Edge Monitoring)?")) {
-                staffList = JSON.parse(JSON.stringify(DEFAULT_STAFF));
-                localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
-                renderTable();
-                closeStaffModal();
-                triggerAutoSave("Staff list restored to default!");
-            }
-        }
-
         function openStaffModal() {
             const container = document.getElementById("staff-editor-list");
             container.innerHTML = "";
