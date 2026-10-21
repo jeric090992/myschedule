@@ -3,127 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automated Attendance Monitoring System</title>
-    
+    <title>Network Monitoring Schedule — Core & Edge</title>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <!-- Screenshot Export Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        /* 4 THEME PALETTES */
-        /* 1. Midnight Navy (Default Dark Slate) */
-        :root, [data-theme="midnight"] {
-            --bg-body: #090d16;
-            --bg-card: #121824;
-            --bg-card-hover: #182030;
-            --border-color: #222d42;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-blue: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.25);
-            --bg-header: linear-gradient(135deg, #131b2e 0%, #0f1626 100%);
-            --bg-th: #161e2e;
-            --bg-col-name: #161e2e;
-            --bg-input: #0f172a;
-            --border-input: #334155;
-            --bg-empty-select: #1a2333;
-        }
-
-        /* 2. Cyber Amethyst (Deep Purple / Neon Violet) */
-        [data-theme="amethyst"] {
-            --bg-body: #0b0717;
-            --bg-card: #150f28;
-            --bg-card-hover: #1f163b;
-            --border-color: #342459;
-            --text-primary: #faf5ff;
-            --text-secondary: #c084fc;
-            --text-muted: #9333ea;
-            --accent-blue: #a855f7;
-            --accent-glow: rgba(168, 85, 247, 0.35);
-            --bg-header: linear-gradient(135deg, #231244 0%, #130a26 100%);
-            --bg-th: #1d1339;
-            --bg-col-name: #1d1339;
-            --bg-input: #110922;
-            --border-input: #49337c;
-            --bg-empty-select: #20153c;
-        }
-
-        /* 3. Emerald Matrix (Deep Forest / Cyber Mint) */
-        [data-theme="emerald"] {
-            --bg-body: #04120c;
-            --bg-card: #092017;
-            --bg-card-hover: #0f3023;
-            --border-color: #154533;
-            --text-primary: #ecfdf5;
-            --text-secondary: #6ee7b7;
-            --text-muted: #10b981;
-            --accent-blue: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.35);
-            --bg-header: linear-gradient(135deg, #0e3425 0%, #061811 100%);
-            --bg-th: #0d2d20;
-            --bg-col-name: #0d2d20;
-            --bg-input: #061710;
-            --border-input: #1a563f;
-            --bg-empty-select: #0f3023;
-        }
-
-        /* 4. Daylight Pro (Crisp Modern Light Mode) */
-        [data-theme="daylight"] {
-            --bg-body: #f1f5f9;
-            --bg-card: #ffffff;
-            --bg-card-hover: #f8fafc;
-            --border-color: #cbd5e1;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --accent-blue: #2563eb;
-            --accent-glow: rgba(37, 99, 235, 0.2);
-            --bg-header: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-            --bg-th: #e2e8f0;
-            --bg-col-name: #f8fafc;
-            --bg-input: #ffffff;
-            --border-input: #cbd5e1;
-            --bg-empty-select: #e2e8f0;
-        }
-
         :root {
-            /* Status Color Palette */
-            --color-present-bg: #064e3b;
-            --color-present-fg: #34d399;
-            --color-present-border: #059669;
+            --bg-page: #0f172a;
+            --header-bg: #141923;
+            --header-border: #232a3b;
+            --name-col-bg: #2c2f37;
+            --name-col-border: #3d424e;
+            --cell-bg: #ffffff;
+            --cell-border: #e2e8f0;
 
-            --color-late-bg: #431407;
-            --color-late-fg: #fb923c;
-            --color-late-border: #ea580c;
-
-            --color-absent-bg: #7f1d1d;
-            --color-absent-fg: #f87171;
-            --color-absent-border: #dc2626;
-
-            --color-leave-bg: #78350f;
-            --color-leave-fg: #fbbf24;
-            --color-leave-border: #d97706;
-
-            --color-halfday-bg: #4c1d95;
-            --color-halfday-fg: #c084fc;
-            --color-halfday-border: #9333ea;
-
-            --color-restday-bg: #1e293b;
-            --color-restday-fg: #94a3b8;
-            --color-restday-border: #475569;
-
-            --color-hduty-bg: #164e63;
-            --color-hduty-fg: #22d3ee;
-            --color-hduty-border: #0891b2;
-
-            --color-hnoduty-bg: #334155;
-            --color-hnoduty-fg: #cbd5e1;
-            --color-hnoduty-border: #64748b;
+            /* Shift Colors Matching Screenshot */
+            --shift-night-bg: #143e77;      /* 10PM-6AM Navy Blue */
+            --shift-afternoon-bg: #ea580c;  /* 2PM-10PM Vivid Orange */
+            --shift-morning-bg: #388e3c;    /* 6AM-2PM Forest Green */
+            --shift-day-bg: #0d9488;        /* 8AM-5PM Deep Teal */
+            --shift-rest-color: #dc2626;    /* REST DAY Bold Red */
+            --shift-sub-color: #111827;     /* Subtitle text black */
+            --reliever-name-color: #143e77; /* Navy blue reliever text */
+            --accent-gold: #f59e0b;
         }
 
         * {
@@ -133,898 +41,538 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: #f1f5f9;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            padding: 20px 16px 60px;
         }
 
-        /* ══ HEADER & TOOLBAR ══════════════════════════════════════ */
-        .app-header {
-            background: linear-gradient(135deg, #131b2e 0%, #0f1626 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px 24px;
+        .app-container {
+            max-width: 1540px;
+            width: 100%;
+            margin: 0 auto;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: max-width 0.3s ease;
         }
 
-        .header-title-group {
-            display: flex;
-            align-items: center;
-            gap: 14px;
+        /* ══ FULL SCREEN CUTOFF MODE: FITS ENTIRE CUTOFF ON SCREEN ══ */
+        .app-container.is-cutoff-mode,
+        .app-container.is-month-mode {
+            max-width: 99vw;
+            width: 99vw;
+            margin: 0 auto;
+            padding: 0 4px;
         }
 
-        .header-icon-box {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        /* ══ TOP BAR & CONTROLS ══════════════════════════════════════ */
+        .top-bar {
+            background: #19202e;
+            border: 1px solid #283347;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-        }
-
-        .header-text h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #ffffff;
-        }
-
-        .header-text p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .autosave-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #34d399;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .autosave-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        .toolbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: #1e293b;
-            color: #f1f5f9;
-            border: 1px solid #334155;
-            padding: 9px 15px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            user-select: none;
-            text-decoration: none;
-        }
-
-        .btn-schedule {
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
-            color: #ffffff !important;
-            border: 1px solid #818cf8 !important;
-            font-weight: 700 !important;
-            text-decoration: none !important;
-            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4) !important;
-            transition: all 0.2s ease !important;
-        }
-
-        .btn-schedule:hover {
-            background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%) !important;
-            border-color: #c7d2fe !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6) !important;
-        }
-
-        .btn:hover {
-            background: #334155;
-            border-color: #475569;
-            color: #ffffff;
-            transform: translateY(-1px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-color: #3b82f6;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e40af);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #059669, #047857);
-            border-color: #10b981;
-            color: #ffffff;
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #047857, #065f46);
-        }
-
-        /* ══ STATS SUMMARY CARDS ═══════════════════════════════════ */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 14px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            border-color: #334155;
-        }
-
-        .stat-info h4 {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            font-weight: 700;
-        }
-
-        .stat-info .stat-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 26px;
-            font-weight: 800;
-            color: #ffffff;
-            margin-top: 4px;
-        }
-
-        .stat-pill {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        /* ══ FILTER & CONTROLS BAR ═════════════════════════════════ */
-        .controls-bar {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
             padding: 14px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35);
         }
 
-        .filter-group {
+        .top-title-area {
             display: flex;
             align-items: center;
             gap: 12px;
-            flex-wrap: wrap;
         }
 
-        .control-label {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .select-input, .date-input, .search-input {
-            background: #0f172a;
-            border: 1px solid #334155;
+        .title-badge {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-            transition: border-color 0.2s ease;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 9px;
+            border-radius: 6px;
+            display: inline-block;
         }
 
-        .select-input:focus, .date-input:focus, .search-input:focus {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 2px var(--accent-glow);
+        .main-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 21px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
 
-        .legend-bar {
+        .sub-title {
+            font-size: 12.5px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .controls-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            background: #0f172a;
-            padding: 8px 14px;
-            border-radius: 10px;
-            border: 1px solid #1e293b;
         }
 
-        .legend-item {
+        .btn-group {
+            display: inline-flex;
+            background: #101520;
+            border: 1px solid #2a3449;
+            border-radius: 8px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            color: #94a3b8;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 11.5px;
-            font-weight: 600;
+            gap: 5px;
+            user-select: none;
+            white-space: nowrap;
         }
 
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
+        .toggle-btn:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.06);
         }
 
-        /* ══ MAIN TABLE CONTAINER ══════════════════════════════════ */
+        .toggle-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+        }
+
+        .ctrl-btn {
+            background: #1e2638;
+            color: #f1f5f9;
+            border: 1px solid #334155;
+            padding: 7px 12px;
+            border-radius: 7px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .ctrl-btn:hover {
+            background: #2d374d;
+            border-color: #475569;
+            color: #38bdf8;
+        }
+
+        .ctrl-btn.btn-export {
+            background: #0f766e;
+            border-color: #14b8a6;
+            color: #ffffff;
+        }
+
+        .ctrl-btn.btn-export:hover {
+            background: #115e59;
+        }
+
+        .period-display {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15.5px;
+            font-weight: 800;
+            color: #ffffff;
+            min-width: 220px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* ══ SCHEDULE TABLE CARD ══════════════════════════════════════ */
         .table-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            background: #131722;
+            border: 1px solid #232a3b;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
+            width: 100%;
         }
 
-        .table-responsive {
+        .table-wrapper {
             width: 100%;
             overflow-x: auto;
             position: relative;
-            max-height: 680px;
-            overflow-y: auto;
         }
 
-        .attendance-table {
+        .roster-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-size: 13px;
+            border-collapse: collapse;
+            table-layout: fixed;
         }
 
-        /* Sticky Table Headers */
-        .attendance-table th {
-            background-color: #161e2e;
-            color: #cbd5e1;
-            padding: 12px 8px;
-            font-weight: 700;
-            font-size: 12px;
-            text-align: center;
-            border-bottom: 2px solid #28354d;
-            border-right: 1px solid #1e293b;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            user-select: none;
-        }
-
-        .attendance-table th.col-emp-name {
-            position: sticky;
-            left: 0;
-            z-index: 30;
-            background-color: #161e2e;
-            min-width: 220px;
-            text-align: left;
-            padding-left: 16px;
-            box-shadow: 2px 0 6px rgba(0,0,0,0.3);
-        }
-
-        .attendance-table th.col-summary {
-            min-width: 50px;
-            font-size: 11px;
-        }
-
-        /* ══ SECTION PARTITIONS (CORE vs EDGE vs OPS) ══════════════ */
-        .section-partition-row td {
+        /* Section Banners */
+        .section-hdr-row td {
+            background: #182236;
             padding: 10px 18px;
             font-family: 'Outfit', sans-serif;
-            font-size: 13.5px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             color: #ffffff;
             border-top: 2px solid #28354d;
             border-bottom: 2px solid #1a2334;
-            text-align: left;
         }
 
-        .section-partition-row.core-partition td {
+        .section-hdr-row.core-hdr td {
             border-left: 6px solid #2563eb;
-            background: linear-gradient(90deg, #1e2942 0%, #121824 100%);
         }
 
-        .section-partition-row.edge-partition td {
+        .section-hdr-row.edge-hdr td {
             border-left: 6px solid #10b981;
-            background: linear-gradient(90deg, #132d29 0%, #121824 100%);
         }
 
-        .section-partition-row.ops-partition td {
-            border-left: 6px solid #8b5cf6;
-            background: linear-gradient(90deg, #251e3e 0%, #121824 100%);
-        }
-
-        .partition-badge {
-            font-size: 10px;
+        .section-badge {
+            font-size: 9.5px;
             font-weight: 800;
             letter-spacing: 1px;
-            padding: 3px 8px;
-            border-radius: 5px;
-            margin-right: 10px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            margin-right: 8px;
             display: inline-block;
             vertical-align: middle;
         }
 
-        .partition-badge.core-badge { background: #2563eb; color: #ffffff; }
-        .partition-badge.edge-badge { background: #059669; color: #ffffff; }
-        .partition-badge.ops-badge { background: #7c3aed; color: #ffffff; }
-
-        .btn-partition-add {
-            font-size: 11px;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        .btn-partition-add.core-btn {
-            background: rgba(37, 99, 235, 0.3);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.5);
-        }
-
-        .btn-partition-add.core-btn:hover {
-            background: #2563eb;
+        .core-badge {
+            background: #1d4ed8;
             color: #ffffff;
-            transform: translateY(-1px);
         }
 
-        .btn-partition-add.edge-btn {
-            background: rgba(16, 185, 129, 0.3);
-            color: #6ee7b7;
-            border: 1px solid rgba(16, 185, 129, 0.5);
-        }
-
-        .btn-partition-add.edge-btn:hover {
+        .edge-badge {
             background: #059669;
             color: #ffffff;
-            transform: translateY(-1px);
         }
 
-        .btn-partition-add.ops-btn {
-            background: rgba(139, 92, 246, 0.3);
-            color: #c4b5fd;
-            border: 1px solid rgba(139, 92, 246, 0.5);
+        /* Header Row */
+        .roster-table thead tr {
+            background-color: var(--header-bg);
+            border-bottom: 2px solid #202737;
         }
 
-        .btn-partition-add.ops-btn:hover {
-            background: #7c3aed;
-            color: #ffffff;
-            transform: translateY(-1px);
-        }
-
-        /* Table Body */
-        .attendance-table tbody tr {
-            transition: background-color 0.15s ease;
-        }
-
-        .attendance-table tbody tr:hover {
-            background-color: var(--bg-card-hover);
-        }
-
-        .attendance-table td {
-            padding: 6px 4px;
+        .roster-table th {
+            padding: 14px 6px;
             text-align: center;
-            border-bottom: 1px solid #1e293b;
-            border-right: 1px solid #1e293b;
-            vertical-align: middle;
+            border-right: 1px solid var(--header-border);
+            user-select: none;
         }
 
-        .attendance-table td.col-emp-name {
+        .roster-table th:last-child {
+            border-right: none;
+        }
+
+        /* Sticky First Column */
+        .roster-table th.col-name-th {
+            width: 160px;
+            font-size: 14px;
+            font-weight: 900;
+            color: #cbd5e1;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             position: sticky;
             left: 0;
             z-index: 10;
-            background-color: #121824;
-            text-align: left;
-            padding: 10px 16px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 14.5px;
-            font-weight: 700;
-            color: #ffffff;
+            background-color: var(--header-bg);
             box-shadow: 2px 0 6px rgba(0,0,0,0.3);
-            white-space: nowrap;
         }
 
-        .attendance-table tbody tr:hover td.col-emp-name {
-            background-color: #182030;
-        }
-
-        .emp-meta {
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-top: 2px;
-            display: block;
-        }
-
-        /* ══ INLINE EDIT MODE FOR STAFF NAMES ═════════════════════ */
-        .emp-name-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            width: 100%;
-        }
-
-        .emp-name-input {
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            color: #ffffff;
-            font-family: 'Outfit', sans-serif;
-            font-size: 14.5px;
-            font-weight: 700;
-            padding: 4px 6px;
-            width: 100%;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .emp-name-input:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: #334155;
-            cursor: pointer;
-        }
-
-        .emp-name-input:focus {
-            background: #0f172a;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 2px var(--accent-glow);
-            color: #ffffff;
-            cursor: text;
-        }
-
-        .emp-edit-icon {
-            font-size: 11px;
-            color: var(--text-muted);
-            opacity: 0.4;
-            transition: all 0.2s ease;
-            pointer-events: none;
-        }
-
-        .emp-name-wrapper:hover .emp-edit-icon {
-            opacity: 1;
-            color: var(--accent-blue);
-        }
-
-        /* ══ CUSTOM SELECT DROPDOWN INSIDE CELLS ═══════════════════ */
-        .status-select {
-            width: 100%;
-            min-width: 58px;
-            height: 28px;
-            border-radius: 6px;
-            border: 1px solid transparent;
-            font-family: 'Outfit', sans-serif;
-            font-size: 11.5px;
-            font-weight: 800;
-            text-align: center;
-            text-align-last: center;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            background-position: center;
-            padding: 0 4px;
-        }
-
-        /* Day Box Container & Note Input */
-        .day-box-cell {
-            padding: 4px 3px !important;
-            vertical-align: middle;
-        }
-
-        .day-box-container {
+        .day-header-cell {
             display: flex;
             flex-direction: column;
-            gap: 3px;
             align-items: center;
-            width: 100%;
-            min-width: 58px;
+            justify-content: center;
+            gap: 2px;
         }
 
-        .day-note-wrap {
-            width: 100%;
-            position: relative;
+        .day-header-name {
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            text-transform: uppercase;
         }
 
-        .day-note-inp {
-            width: 100%;
-            box-sizing: border-box;
-            height: 19px;
-            font-family: 'Inter', -apple-system, sans-serif;
-            font-size: 10px;
+        .day-header-date {
+            font-size: 12px;
             font-weight: 600;
-            text-align: center;
-            border-radius: 4px;
-            border: 1px dashed rgba(148, 163, 184, 0.25);
-            background: rgba(15, 23, 42, 0.55);
             color: #94a3b8;
-            outline: none;
-            padding: 0 4px;
-            transition: all 0.2s ease;
-            text-overflow: ellipsis;
             white-space: nowrap;
-            overflow: hidden;
         }
 
-        .day-note-inp::placeholder {
-            color: rgba(148, 163, 184, 0.35);
-            font-size: 9px;
-            font-style: italic;
-            font-weight: 400;
+        .roster-table th.is-today {
+            background-color: #1a253a;
         }
 
-        .day-note-inp:hover {
-            border-color: rgba(129, 140, 248, 0.6);
-            background: rgba(30, 41, 59, 0.8);
-            color: #e2e8f0;
+        .roster-table th.is-today .day-header-name {
+            color: #38bdf8;
         }
 
-        .day-note-inp:focus {
-            border: 1px solid #818cf8;
-            background: #0f172a;
+        .roster-table th.is-today .day-header-date {
+            color: #7dd3fc;
+        }
+
+        /* Left Column: NAME */
+        .roster-table tbody tr {
+            border-bottom: 1px solid #353b47;
+        }
+
+        .roster-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .roster-table td.col-name {
+            background-color: var(--name-col-bg);
             color: #ffffff;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
-            z-index: 4;
-        }
-
-        .btn-staff-delete {
-            background: transparent;
-            border: none;
-            color: #ef4444;
-            opacity: 0.45;
-            cursor: pointer;
-            font-size: 12.5px;
-            padding: 3px 5px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            margin-left: auto;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-staff-delete:hover {
-            opacity: 1;
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            transform: scale(1.15);
-        }
-
-        .btn-note-clear {
-            position: absolute;
-            right: 2px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(239, 68, 68, 0.35);
-            color: #f87171;
-            font-size: 11px;
-            line-height: 1;
-            width: 14px;
-            height: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-            cursor: pointer;
-            padding: 0;
-            transition: all 0.15s ease;
+            font-family: 'Outfit', 'Inter', sans-serif;
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-align: center;
+            vertical-align: middle;
+            padding: 20px 10px;
+            border-right: 1px solid var(--name-col-border);
+            border-bottom: 1px solid #3a3f4c;
+            position: sticky;
+            left: 0;
             z-index: 5;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.3);
+            width: 160px;
         }
 
-        .btn-note-clear:hover {
-            background: #ef4444;
-            color: #ffffff;
-            transform: translateY(-50%) scale(1.15);
+        /* Gold Left Border accent for ZUES */
+        .roster-table tr.row-accent td.col-name {
+            border-left: 5px solid var(--accent-gold);
         }
 
-        .day-note-inp.has-note {
-            border: 1px solid rgba(99, 102, 241, 0.6);
-            background: rgba(30, 41, 59, 0.9);
-            color: #c7d2fe;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        /* Shift Data Cells */
+        .roster-table td.shift-cell {
+            background-color: var(--cell-bg);
+            border-right: 1px solid var(--cell-border);
+            border-bottom: 1px solid var(--cell-border);
+            text-align: center;
+            vertical-align: middle;
+            padding: 14px 6px;
+            height: 98px;
         }
 
-        .status-select:focus {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 2px var(--accent-blue);
-            z-index: 5;
+        .roster-table td.shift-cell:last-child {
+            border-right: none;
         }
 
-        /* Status Colors for Selects */
-        .status-select[data-status=""] {
-            background-color: #1a2333;
-            color: #475569;
-            border-color: #27354a;
+        .roster-table td.shift-cell.is-today-col {
+            background-color: #f8fafc;
         }
-        .status-select[data-status=""] option { background-color: #121824; color: #94a3b8; }
 
-        .status-select[data-status="P"] {
-            background-color: var(--color-present-bg);
-            color: var(--color-present-fg);
-            border-color: var(--color-present-border);
-        }
-        .status-select[data-status="P"] option { background-color: #064e3b; color: #34d399; }
-
-        .status-select[data-status="L"], .status-select[data-status="LT"] {
-            background-color: var(--color-late-bg);
-            color: var(--color-late-fg);
-            border-color: var(--color-late-border);
-        }
-        .status-select[data-status="L"] option, .status-select[data-status="LT"] option { background-color: #431407; color: #fb923c; }
-
-        .status-select[data-status="A"] {
-            background-color: var(--color-absent-bg);
-            color: var(--color-absent-fg);
-            border-color: var(--color-absent-border);
-        }
-        .status-select[data-status="A"] option { background-color: #7f1d1d; color: #f87171; }
-
-        .status-select[data-status="VL"] {
-            background-color: var(--color-leave-bg);
-            color: var(--color-leave-fg);
-            border-color: var(--color-leave-border);
-        }
-        .status-select[data-status="VL"] option { background-color: #78350f; color: #fbbf24; }
-
-        .status-select[data-status="HD"] {
-            background-color: var(--color-halfday-bg);
-            color: var(--color-halfday-fg);
-            border-color: var(--color-halfday-border);
-        }
-        .status-select[data-status="HD"] option { background-color: #4c1d95; color: #c084fc; }
-
-        .status-select[data-status="RD"] {
-            background-color: var(--color-restday-bg);
-            color: var(--color-restday-fg);
-            border-color: var(--color-restday-border);
-        }
-        .status-select[data-status="RD"] option { background-color: #1e293b; color: #94a3b8; }
-
-        .status-select[data-status="HDty"] {
-            background-color: var(--color-hduty-bg);
-            color: var(--color-hduty-fg);
-            border-color: var(--color-hduty-border);
-        }
-        .status-select[data-status="HDty"] option { background-color: #164e63; color: #22d3ee; }
-
-        .status-select[data-status="HND"] {
-            background-color: var(--color-hnoduty-bg);
-            color: var(--color-hnoduty-fg);
-            border-color: var(--color-hnoduty-border);
-        }
-        .status-select[data-status="HND"] option { background-color: #334155; color: #cbd5e1; }
-
-        /* Summary cell values */
-        .count-badge {
-            font-family: 'Outfit', sans-serif;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 6px;
+        /* ══ BADGE PILLS (WEEKLY DEFAULT) ════════════════════════════ */
+        .badge-pill {
             display: inline-block;
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+            white-space: nowrap;
         }
 
-        .count-badge.p-cnt   { background: rgba(52,  211, 153, 0.15); color: #34d399; }
-        .count-badge.l-cnt   { background: rgba(251, 146, 60,  0.15); color: #fb923c; }
-        .count-badge.a-cnt   { background: rgba(248, 113, 113, 0.15); color: #f87171; }
-        .count-badge.vl-cnt  { background: rgba(251, 191, 36,  0.15); color: #fbbf24; }
-        .count-badge.hd-cnt  { background: rgba(192, 132, 252, 0.15); color: #c084fc; }
-        .count-badge.rd-cnt  { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
-        .count-badge.hdty-cnt{ background: rgba(34,  211, 238, 0.15); color: #22d3ee; }
-        .count-badge.hnd-cnt { background: rgba(203, 213, 225, 0.15); color: #cbd5e1; }
+        .badge-pill.night { background-color: var(--shift-night-bg); }
+        .badge-pill.afternoon { background-color: var(--shift-afternoon-bg); }
+        .badge-pill.morning { background-color: var(--shift-morning-bg); }
+        .badge-pill.day { background-color: var(--shift-day-bg); }
 
-        /* ══ MODAL FOR STAFF MANAGEMENT ═══════════════════════════ */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(5px);
+        .shift-subtitle {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--shift-sub-color);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        /* REST DAY */
+        .rest-day-box {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
+            gap: 2px;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+        .rest-day-title {
+            color: var(--shift-rest-color);
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
-        .modal-card {
-            background: #141c2c;
-            border: 1px solid #2a3850;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 550px;
-            padding: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .rest-reliever-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #475569;
+            margin-top: 2px;
+            white-space: nowrap;
         }
 
-        .modal-header {
+        .rest-reliever-name {
+            color: var(--reliever-name-color);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .no-reliever-text {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-top: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* ══ CUTOFF VIEW SCALED STYLING: FITS ALL 15 DAYS ON SCREEN ══ */
+        .app-container.is-cutoff-mode .roster-table th.col-name-th,
+        .app-container.is-cutoff-mode .roster-table td.col-name {
+            width: 120px;
+            min-width: 120px;
+            font-size: 15px;
+            padding: 10px 4px;
+            letter-spacing: 0.8px;
+        }
+
+        .app-container.is-cutoff-mode .roster-table th {
+            padding: 8px 2px;
+        }
+
+        .app-container.is-cutoff-mode .day-header-name {
+            font-size: 11px;
+            letter-spacing: 0;
+        }
+
+        .app-container.is-cutoff-mode .day-header-date {
+            font-size: 10px;
+        }
+
+        .app-container.is-cutoff-mode .roster-table td.shift-cell {
+            padding: 6px 2px;
+            height: 78px;
+        }
+
+        .app-container.is-cutoff-mode .badge-pill {
+            padding: 3px 5px;
+            font-size: 10.5px;
+            letter-spacing: 0;
+            border-radius: 4px;
+        }
+
+        .app-container.is-cutoff-mode .shift-subtitle {
+            font-size: 8.5px;
+            margin-top: 2px;
+            line-height: 1.1;
+            letter-spacing: 0;
+        }
+
+        .app-container.is-cutoff-mode .rest-day-title {
+            font-size: 11.5px;
+            letter-spacing: 0;
+        }
+
+        .app-container.is-cutoff-mode .rest-reliever-label {
+            font-size: 8.5px;
+            margin-top: 1px;
+        }
+
+        .app-container.is-cutoff-mode .rest-reliever-name {
+            font-size: 9.5px;
+        }
+
+        .app-container.is-cutoff-mode .no-reliever-text {
+            font-size: 8.5px;
+            margin-top: 1px;
+        }
+
+        /* ══ ROTATION TABLE & RULES CARD ═════════════════════════════ */
+        .info-card {
+            background: #161c28;
+            border: 1px solid #263143;
+            border-radius: 12px;
+            padding: 18px 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .info-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+            color: #e2e8f0;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-header h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 18px;
-            color: #ffffff;
-        }
-
-        .modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .staff-list-editor {
-            max-height: 320px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
             gap: 8px;
         }
 
-        .staff-edit-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #0f172a;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #1e293b;
-        }
-
-        .staff-edit-item input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-family: inherit;
-            font-size: 13.5px;
-            outline: none;
-        }
-
-        /* ══ ATTENDANCE SUMMARY CELL ══════════════════════════════ */
-        .att-summary-cell {
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .att-rate {
-            font-family: 'Outfit', sans-serif;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.15);
-            color: #a5b4fc;
-        }
-
-        .att-pct-badge {
-            font-family: 'Outfit', sans-serif;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
-        }
-
-        .pct-excellent { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-        .pct-good      { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
-        .pct-warning   { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-        .pct-danger    { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-        .pct-neutral   { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
-
-        /* ══ SECTION TOTAL FOOTER ROW ════════════════════════════════ */
-        .section-total-row td {
-            padding: 8px 10px;
-            font-family: 'Outfit', sans-serif;
+        .rotation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
             font-size: 12.5px;
-            font-weight: 800;
-            text-align: center;
-            border-bottom: 2px solid #28354d;
-            background: rgba(10, 15, 28, 0.7);
-            color: #94a3b8;
         }
 
-        .section-total-row td.lbl {
+        .rotation-table th, .rotation-table td {
+            border: 1px solid #2a3449;
+            padding: 8px 12px;
             text-align: left;
-            padding-left: 16px;
-            color: #cbd5e1;
-            font-size: 13px;
         }
 
-        .section-total-row .total-rate {
-            font-family: 'Outfit', sans-serif;
-            font-size: 14px;
+        .rotation-table th {
+            background: #101520;
+            color: #ffffff;
             font-weight: 800;
-            padding: 5px 10px;
-            border-radius: 7px;
-            background: rgba(99, 102, 241, 0.2);
-            color: #818cf8;
-            display: inline-block;
+        }
+
+        .rotation-table tr:nth-child(even) {
+            background: #1a2232;
+        }
+
+        .rules-note {
+            margin-top: 14px;
+            font-size: 12.5px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .rules-note strong {
+            color: #f1f5f9;
         }
 
         /* ══ PRINT STYLES ═══════════════════════════════════════════ */
@@ -1034,1191 +582,708 @@
                 color: #000000 !important;
                 padding: 0 !important;
             }
-            .app-header, .controls-bar, .stats-grid, .btn {
+
+            .top-bar, .info-card {
                 display: none !important;
             }
+
             .table-card {
-                border: 1px solid #000000 !important;
                 box-shadow: none !important;
+                border: 1px solid #000000 !important;
             }
-            .attendance-table th, .attendance-table td {
-                color: #000000 !important;
-                border-color: #cbd5e1 !important;
-            }
-            .status-select {
+
+            .badge-pill {
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
             }
-        }
-    
-        /* Theme Switcher Widget */
-        .theme-selector-box {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-        }
 
-        .theme-selector-box:hover {
-            border-color: var(--accent-blue);
-        }
+            .roster-table td.col-name {
+                background-color: #2c2f37 !important;
+                color: #ffffff !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
 
-        .theme-label-icon {
-            font-size: 13px;
-            color: var(--accent-blue);
-        }
-
-        .theme-select {
-            background: transparent;
-            color: var(--text-primary);
-            border: none;
-            font-family: 'Outfit', sans-serif;
-            font-size: 12.5px;
-            font-weight: 700;
-            outline: none;
-            cursor: pointer;
-            padding-right: 4px;
-        }
-
-        .theme-select option {
-            background: #0f172a;
-            color: #ffffff;
-            font-size: 13px;
-            padding: 6px;
-        }
-
-        /* Theme Overrides for Core Elements */
-        .app-header {
-            background: var(--bg-header) !important;
-            border: 1px solid var(--border-color) !important;
-        }
-
-        th {
-            background-color: var(--bg-th) !important;
-            color: var(--text-primary) !important;
-            border-bottom: 2px solid var(--border-color) !important;
-            border-right: 1px solid var(--border-color) !important;
-        }
-
-        .col-emp-name {
-            background-color: var(--bg-col-name) !important;
-        }
-
-        .search-input, .select-input {
-            background: var(--bg-input) !important;
-            border: 1px solid var(--border-input) !important;
-            color: var(--text-primary) !important;
-        }
-
-        .legend-bar {
-            background: var(--bg-input) !important;
-            border: 1px solid var(--border-color) !important;
-        }
-
-        .status-select[data-status=""] {
-            background-color: var(--bg-empty-select) !important;
-            color: var(--text-muted) !important;
-        }
-
-        /* Specific Daylight enhancements */
-        [data-theme="daylight"] .header-text h1 {
-            color: #0f172a !important;
-        }
-        [data-theme="daylight"] .header-text p {
-            color: #64748b !important;
-        }
-        [data-theme="daylight"] .table-card {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-            border: 1px solid #cbd5e1 !important;
-        }
-        [data-theme="daylight"] .stat-card {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
-        }
-        [data-theme="daylight"] td {
-            border-bottom: 1px solid #e2e8f0 !important;
-            border-right: 1px solid #e2e8f0 !important;
-        }
-        [data-theme="daylight"] .btn {
-            background: #e2e8f0;
-            color: #1e293b;
-            border-color: #cbd5e1;
-        }
-        [data-theme="daylight"] .btn:hover {
-            background: #cbd5e1;
-            color: #0f172a;
-        }
-        [data-theme="daylight"] .btn-schedule {
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
-            color: #ffffff !important;
-        }
-        [data-theme="daylight"] .emp-name-input {
-            color: #0f172a !important;
-        }
-        [data-theme="daylight"] .theme-selector-box {
-            background: #ffffff !important;
-            border-color: #cbd5e1 !important;
-        }
-        [data-theme="daylight"] .theme-select option {
-            background: #ffffff !important;
-            color: #0f172a !important;
+            .roster-table th {
+                background-color: #141923 !important;
+                color: #ffffff !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ══ HEADER ══════════════════════════════════════════════════ -->
-    <header class="app-header">
-        <div class="header-title-group">
-            <div class="header-icon-box">
-                <i class="fa-solid fa-calendar-check"></i>
-            </div>
-            <div class="header-text">
-                <h1>Attendance Monitoring System</h1>
-                <p>Core & Edge Monitoring Attendance Tracker</p>
+<div class="app-container" id="main-app-container">
+
+    <!-- ══ TOP BAR ══════════════════════════════════════════════ -->
+    <header class="top-bar">
+        <div class="top-title-area">
+            <div>
+                <div class="title-badge">NMOC Dashboard</div>
+                <div class="main-title">Network Monitoring Schedule</div>
+                <div class="sub-title" id="pattern-status-text">Core & Edge Monitoring Roster</div>
             </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div class="autosave-badge" id="autosave-indicator">
-                <span class="autosave-dot"></span>
-                <span id="autosave-text">Auto-Saved to Storage</span>
+        <div class="controls-group">
+            <!-- 1. View Mode (Weekly vs Whole Cutoff vs Whole Month) -->
+            <div class="btn-group">
+                <button class="toggle-btn active" id="btn-view-week" onclick="setViewMode('week')">
+                    📅 Weekly
+                </button>
+                <button class="toggle-btn" id="btn-view-cutoff" onclick="setViewMode('cutoff')">
+                    📋 Whole Cutoff
+                </button>
+                <button class="toggle-btn" id="btn-view-month" onclick="setViewMode('month')">
+                    🗓️ Whole Month
+                </button>
             </div>
 
-            <!-- 4 THEME CHOICES -->
-            <div class="theme-selector-box" title="Switch between 4 Dashboard Themes">
-                <i class="fa-solid fa-palette theme-label-icon"></i>
-                <select id="themeSelector" class="theme-select" onchange="changeTheme(this.value)">
-                    <option value="midnight">🌌 Midnight Navy</option>
-                    <option value="amethyst">🔮 Cyber Amethyst</option>
-                    <option value="emerald">🌲 Emerald Matrix</option>
-                    <option value="daylight">☀️ Daylight Pro</option>
-                </select>
+            <!-- 2. Team Filter Tabs -->
+            <div class="btn-group">
+                <button class="toggle-btn active" id="btn-tab-all" onclick="setSectionFilter('all')">
+                    🌐 All
+                </button>
+                <button class="toggle-btn" id="btn-tab-core" onclick="setSectionFilter('core')">
+                    ⭐ Core
+                </button>
+                <button class="toggle-btn" id="btn-tab-edge" onclick="setSectionFilter('edge')">
+                    🟢 Edge
+                </button>
             </div>
 
-            <div class="toolbar-actions">
-                <a href="schedule.html" 
-                   class="btn btn-schedule" 
-                   title="Open Network Monitoring Schedule (schedule.html)">
-                    <i class="fa-solid fa-calendar-days"></i> My Schedule
-                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10.5px; margin-left: 3px; opacity: 0.85;"></i>
-                </a>
+            <!-- 3. Navigation -->
+            <button class="ctrl-btn" onclick="prevPeriod()" id="btn-prev" title="Previous Period">
+                ◀ Prev
+            </button>
 
-                <button class="btn btn-danger" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35);" onclick="clearMonthAttendance()" title="Clear attendance and notes for this month">
-                    <i class="fa-solid fa-trash-can"></i> Clear Month
-                </button>
-                <button class="btn btn-primary" onclick="markAllToday('P')">
-                    <i class="fa-solid fa-user-check"></i> All Present Today
-                </button>
-                <button class="btn" onclick="openStaffModal()">
-                    <i class="fa-solid fa-users-gear"></i> Manage Staff
-                </button>
-                <button class="btn btn-success" onclick="exportToCSV()">
-                    <i class="fa-solid fa-file-excel"></i> Export CSV
-                </button>
-                <button class="btn" onclick="exportJSONBackup()">
-                    <i class="fa-solid fa-download"></i> Backup JSON
-                </button>
-                <button class="btn" onclick="document.getElementById('import-file').click()">
-                    <i class="fa-solid fa-upload"></i> Import JSON
-                </button>
-                <input type="file" id="import-file" style="display: none;" accept=".json" onchange="importJSONBackup(event)">
+            <div class="period-display" id="period-label">
+                September 14 – September 20, 2026
             </div>
+
+            <button class="ctrl-btn" onclick="nextPeriod()" id="btn-next" title="Next Period">
+                Next ▶
+            </button>
+
+            <button class="ctrl-btn" onclick="goToTargetDate()" title="Jump to Target Week (September 14, 2026)">
+                🎯 Sep 14, 2026
+            </button>
+            <button class="ctrl-btn" onclick="goToToday()" title="Current Period">
+                ▶ Today
+            </button>
+
+            <button class="ctrl-btn btn-export" onclick="exportSchedule()" title="Download schedule as image">
+                📸 Export PNG
+            </button>
+            <button class="ctrl-btn" onclick="window.print()" title="Print schedule">
+                🖨️ Print
+            </button>
         </div>
     </header>
 
-    <!-- ══ STATS SUMMARY ═══════════════════════════════════════════ -->
-    <section class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Present</h4>
-                <div class="stat-value" id="total-present">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Late</h4>
-                <div class="stat-value" id="total-late">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(251, 146, 60, 0.15); color: #fb923c;">
-                <i class="fa-solid fa-business-time"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Absent</h4>
-                <div class="stat-value" id="total-absent">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(248, 113, 113, 0.15); color: #f87171;">
-                <i class="fa-solid fa-circle-xmark"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Vacation Leave</h4>
-                <div class="stat-value" id="total-leave">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;">
-                <i class="fa-solid fa-plane-departure"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Halfday</h4>
-                <div class="stat-value" id="total-halfday">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(192, 132, 252, 0.15); color: #c084fc;">
-                <i class="fa-solid fa-clock"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Restday</h4>
-                <div class="stat-value" id="total-restday">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8;">
-                <i class="fa-solid fa-bed"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Holiday Duty</h4>
-                <div class="stat-value" id="total-hduty">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(34, 211, 238, 0.15); color: #22d3ee;">
-                <i class="fa-solid fa-briefcase"></i>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-info">
-                <h4>Holiday No Duty</h4>
-                <div class="stat-value" id="total-hnoduty">0</div>
-            </div>
-            <div class="stat-pill" style="background: rgba(203, 213, 225, 0.15); color: #cbd5e1;">
-                <i class="fa-solid fa-umbrella-beach"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══ CONTROLS & LEGEND BAR ════════════════════════════════════ -->
-    <section class="controls-bar">
-        <div class="filter-group">
-            <div class="control-label">
-                <i class="fa-solid fa-calendar-days"></i> Month:
-                <input type="month" id="month-picker" class="date-input" onchange="onMonthChange()">
-            </div>
-
-            <div class="control-label">
-                <i class="fa-solid fa-filter"></i> Cutoff / Range:
-                <select id="cutoff-filter" class="select-input" onchange="onCutoffChange()">
-                    <option value="all">Full Month (All Days)</option>
-                    <option value="1-15">1st – 15th Cutoff</option>
-                    <option value="16-end">16th – End Cutoff</option>
-                </select>
-            </div>
-
-            <div class="control-label">
-                <i class="fa-solid fa-users"></i> Team Filter:
-                <select id="dept-filter" class="select-input" onchange="onDeptFilterChange()">
-                    <option value="all">All Teams (Core & Edge)</option>
-                    <option value="Core Monitoring">⭐ Core Monitoring</option>
-                    <option value="Edge Monitoring">🟢 Edge Monitoring</option>
-                    <option value="Operations">🟣 Operations / Other</option>
-                </select>
-            </div>
-
-            <div class="control-label">
-                <i class="fa-solid fa-magnifying-glass"></i> Search:
-                <input type="text" id="search-input" class="search-input" placeholder="Search staff name..." oninput="filterTable()">
-            </div>
-        </div>
-
-        <!-- Legend -->
-        <div class="legend-bar">
-            <div class="legend-item"><span class="legend-dot" style="background:#34d399;"></span> P: Present</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#fb923c;"></span> L: Late (=Present)</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#f87171;"></span> A: Absent</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#fbbf24;"></span> VL: Vacation Leave</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#c084fc;"></span> HD: Halfday</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#94a3b8;"></span> RD: Restday</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#22d3ee;"></span> HDty: Holiday Duty</div>
-            <div class="legend-item"><span class="legend-dot" style="background:#64748b;"></span> HND: Holiday No Duty</div>
-        </div>
-    </section>
-
-    <!-- ══ MAIN ATTENDANCE TABLE ════════════════════════════════════ -->
-    <main class="table-card">
-        <div class="table-responsive">
-            <table class="attendance-table" id="attendance-table">
+    <!-- ══ SCHEDULE ROSTER TABLE ═════════════════════════════════ -->
+    <div class="table-card" id="schedule-capture-area">
+        <div class="table-wrapper">
+            <table class="roster-table" id="roster-table-elem">
                 <thead>
-                    <tr id="table-header-row">
-                        <!-- Populated by JS -->
+                    <tr id="header-row">
+                        <!-- Populated by JavaScript -->
                     </tr>
                 </thead>
-                <tbody id="table-body">
-                    <!-- Populated by JS -->
+                <tbody id="roster-tbody">
+                    <!-- Populated by JavaScript: Core Network and Edge Network sections -->
                 </tbody>
             </table>
         </div>
-    </main>
+    </div>
 
-    <!-- ══ STAFF MANAGEMENT MODAL ═══════════════════════════════════ -->
-    <div class="modal-overlay" id="staff-modal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Manage Staff & Teams</h3>
-                <button class="modal-close" onclick="closeStaffModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <p style="font-size: 12.5px; color: var(--text-secondary);">
-                Edit staff names and department partitions below.
-            </p>
+    <!-- ══ ROTATION PATTERNS TABLE & NOTES ═══════════════════════ -->
+    <div class="info-card">
+        <div class="info-title">
+            <span>🔄</span> Edge Rotation Patterns & Rest Day Rules
+        </div>
 
-            <div class="staff-list-editor" id="staff-editor-list">
-                <!-- Inputs populated by JS -->
-            </div>
+        <div style="overflow-x: auto;">
+            <table class="rotation-table">
+                <thead>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>Cutoff Period</th>
+                        <th>Jason</th>
+                        <th>Benedict</th>
+                        <th>Paulo</th>
+                        <th>Leric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>11–25</td>
+                        <td>8 AM–5 PM FIX</td>
+                        <td>8 AM–5 PM / RELIEVER</td>
+                        <td>6 AM–2 PM</td>
+                        <td>2 PM–10 PM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>26–10</td>
+                        <td>8 AM–5 PM / RELIEVER</td>
+                        <td>6 AM–2 PM</td>
+                        <td>2 PM–10 PM</td>
+                        <td>8 AM–5 PM FIX</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>11–25</td>
+                        <td>6 AM–2 PM</td>
+                        <td>2 PM–10 PM</td>
+                        <td>8 AM–5 PM FIX</td>
+                        <td>8 AM–5 PM / RELIEVER</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>26–10</td>
+                        <td>2 PM–10 PM</td>
+                        <td>8 AM–5 PM FIX</td>
+                        <td>8 AM–5 PM / RELIEVER</td>
+                        <td>6 AM–2 PM</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 8px;">
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button class="btn btn-primary" style="font-size: 12px; padding: 7px 11px;" onclick="addStaffMember('Core Monitoring')">
-                        <i class="fa-solid fa-plus"></i> Add Core Member
-                    </button>
-                    <button class="btn btn-success" style="font-size: 12px; padding: 7px 11px;" onclick="addStaffMember('Edge Monitoring')">
-                        <i class="fa-solid fa-plus"></i> Add Edge Member
-                    </button>
-                    <button class="btn" style="font-size: 12px; padding: 7px 11px;" onclick="addStaffMember('Operations')">
-                        <i class="fa-solid fa-plus"></i> Add Ops Member
-                    </button>
-                </div>
-                <button class="btn btn-primary" onclick="saveStaffNames()">
-                    <i class="fa-solid fa-check"></i> Save Changes
-                </button>
-            </div>
+        <div class="rules-note">
+            <p><strong>Core Network Staff:</strong> Jeric, Rodney, Jenesis, Adriane, Zues (All Schedule 8–5, Sunday RD).</p>
+            <p style="margin-top: 6px;"><strong>Edge Network Staff:</strong> Paulo (Sunday RD), Benedict (Tuesday RD), Jason (Saturday RD), Leric (Thursday RD).</p>
+            <p style="margin-top: 6px;"><strong>Reliever Rule:</strong> When an employee assigned to 6 AM–2 PM, 2 PM–10 PM, or 8 AM–5 PM FIX is on Rest Day, the designated <strong>RELIEVER</strong> takes over their shift.</p>
         </div>
     </div>
 
-    <!-- ══ JAVASCRIPT LOGIC WITH AUTO-SAVE ═════════════════════════ -->
-    <script>
-        /* ============================================================
-           1. INITIAL DEFAULT STAFF (CORE & EDGE PARTITIONED)
-        ============================================================ */
-        const DEFAULT_STAFF = [
-            // Core Monitoring Staff
-            { id: 1,  name: "Gino Parala",        dept: "Core Monitoring", restDay: "Sunday" },
-            { id: 2,  name: "Jeric Macaspac",    dept: "Core Monitoring", restDay: "Tuesday"  },
-            { id: 3,  name: "Rodney Cataran",     dept: "Core Monitoring", restDay: "Sunday"   },
-            { id: 4,  name: "Jenesis Almari",     dept: "Core Monitoring", restDay: "Saturday" },
-            { id: 5,  name: "Adriane Allada",     dept: "Core Monitoring", restDay: "Monday"   },
-            { id: 6,  name: "Zeus Garcia",        dept: "Core Monitoring", restDay: "Sunday"   },
-            { id: 7,  name: "Ruzley Roxas",       dept: "Core Monitoring", restDay: "Sunday"   },
+</div>
 
-            // Edge Monitoring Staff
-            { id: 8, name: "Laarni Macaspac",    dept: "Edge Monitoring", restDay: "Sunday"   },
-            { id: 9,  name: "Paulo Alforja",      dept: "Edge Monitoring", restDay: "Sunday"   },
-            { id: 10, name: "Benedict Martin",    dept: "Edge Monitoring", restDay: "Tuesday"  },
-            { id: 11, name: "Jason Menorca",      dept: "Edge Monitoring", restDay: "Saturday" },
-            { id: 12, name: "Leric Landicho",     dept: "Edge Monitoring", restDay: "Thursday" },
-        ];
+<!-- ══ JAVASCRIPT: COMBINED CORE & EDGE SCHEDULE DATA ═══════════ -->
+<script>
+/* ============================================================
+   ROSTER CONFIGURATION
+============================================================ */
 
-        const STATUS_OPTIONS = [
-            { code: "",     label: "— Clear —" },
-            { code: "P",    label: "P (Present)" },
-            { code: "L",    label: "L (Late)" },
-            { code: "A",    label: "A (Absent)" },
-            { code: "VL",   label: "VL (Vacation Leave)" },
-            { code: "HD",   label: "HD (Halfday)" },
-            { code: "RD",   label: "RD (Restday)" },
-            { code: "HDty", label: "HDty (Holiday Duty)" },
-            { code: "HND",  label: "HND (Holiday No Duty)" }
-        ];
+// 1. Core Network Staff (Matches Screenshot!)
+const CORE_STAFF = [
+    { name: "JERIC", fullName: "Jeric Macaspac", key: "jeric" },
+    { name: "RODNEY", fullName: "Rodney Cataran", key: "rodney" },
+    { name: "JENESIS", fullName: "Jenesis Almari", key: "jenesis" },
+    { name: "ADRIANE", fullName: "Adriane Allada", key: "adriane" },
+    { name: "ZUES", fullName: "Zeus Garcia", key: "zeus", isAccent: true }
+];
 
-        /* Maps day-name strings (as stored in staff.restDay) to JS getDay() numbers */
-        const REST_DAY_MAP = {
-            "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3,
-            "Thursday": 4, "Friday": 5, "Saturday": 6
+// 2. Edge Network Staff (No Zeus in Edge Network!)
+const EDGE_STAFF = [
+    { name: "PAULO", fullName: "Paulo Alforja", key: "paulo" },
+    { name: "BENEDICT", fullName: "Benedict Martin", key: "benedict" },
+    { name: "JASON", fullName: "Jason Menorca", key: "jason" },
+    { name: "LERIC", fullName: "Leric Landicho", key: "leric" }
+];
+
+// Edge Rotation Patterns (Cutoffs 11–25 & 26–10)
+const EDGE_PATTERNS = [
+    { fixed: "jason", reliever: "benedict", shift6to2: "paulo", shift2to10: "leric" },
+    { fixed: "leric", reliever: "jason", shift6to2: "benedict", shift2to10: "paulo" },
+    { fixed: "paulo", reliever: "leric", shift6to2: "jason", shift2to10: "benedict" },
+    { fixed: "benedict", reliever: "paulo", shift6to2: "leric", shift2to10: "jason" }
+];
+
+const EDGE_REST_DAYS = {
+    paulo: 0,    // Sunday
+    benedict: 2, // Tuesday
+    jason: 6,    // Saturday
+    leric: 4     // Thursday
+};
+
+// Core Patterns (4-week rotation cycle anchored September 14, 2026 as Pattern 1)
+const CORE_PATTERNS = {
+    "jeric": [
+        [2, 3, 2, 2, 2, 2, 2], // Pattern 1: Sep 14-20 (Night, Tue RD)
+        [1, 3, 1, 1, 1, 2, 1], // Pattern 2: Sep 21-27 (Afternoon, Tue RD, Sat 10PM-6AM RELIEVER)
+        [1, 3, 1, 1, 1, 1, 0], // Pattern 3: Sep 28-Oct 4 (Afternoon, Tue RD, Sun 6AM-2PM RELIEVER)
+        [0, 3, 0, 0, 0, 0, 0]  // Pattern 4: Oct 5-Oct 11 (Morning, Tue RD)
+    ],
+    "rodney": [
+        [1, 2, 1, 1, 1, 1, 3], // Pattern 1: Sep 14-20 (Afternoon, Tue 10PM-6AM RELIEVER, Sun RD)
+        [0, 1, 1, 1, 1, 1, 3], // Pattern 2: Sep 21-27 (Afternoon, Mon 6AM-2PM RELIEVER, Sun RD)
+        [0, 0, 0, 0, 0, 0, 3], // Pattern 3: Sep 28-Oct 4 (Morning, Sun RD)
+        [2, 2, 2, 2, 2, 2, 3]  // Pattern 4: Oct 5-Oct 11 (Night, Sun RD)
+    ],
+    "jenesis": [
+        [0, 0, 0, 0, 0, 3, 0], // Pattern 1: Sep 14-20 (Morning, Sat RD)
+        [2, 2, 2, 2, 2, 3, 2], // Pattern 2: Sep 21-27 (Night, Sat RD)
+        [2, 1, 1, 1, 1, 3, 1], // Pattern 3: Sep 28-Oct 4 (Afternoon, Mon 10PM-6AM RELIEVER, Sat RD)
+        [1, 0, 1, 1, 1, 3, 1]  // Pattern 4: Oct 5-Oct 11 (Afternoon, Tue 6AM-2PM RELIEVER, Sat RD)
+    ],
+    "adriane": [
+        [3, 1, 1, 1, 1, 0, 1], // Pattern 1: Sep 14-20 (Mon RD, Sat 6AM-2PM RELIEVER)
+        [3, 0, 0, 0, 0, 0, 0], // Pattern 2: Sep 21-27 (Mon RD, Morning)
+        [3, 2, 2, 2, 2, 2, 2], // Pattern 3: Sep 28-Oct 4 (Mon RD, Night)
+        [3, 1, 1, 1, 1, 1, 2]  // Pattern 4: Oct 5-Oct 11 (Mon RD, Sun 10PM-6AM RELIEVER)
+    ]
+};
+
+// Reliever mapping for Core Rest Days: [pIdx][dayIdx] = { restUser, relieverUser }
+const CORE_RELIEVERS = {
+    0: {
+        1: { restUser: "jeric", relieverUser: "RODNEY" },   // Tue: Jeric RD -> Rodney
+        5: { restUser: "jenesis", relieverUser: "ADRIANE" } // Sat: Jenesis RD -> Adriane
+    },
+    1: {
+        0: { restUser: "adriane", relieverUser: "RODNEY" }, // Mon: Adriane RD -> Rodney
+        5: { restUser: "jenesis", relieverUser: "JERIC" }   // Sat: Jenesis RD -> Jeric
+    },
+    2: {
+        0: { restUser: "adriane", relieverUser: "JENESIS" },// Mon: Adriane RD -> Jenesis
+        6: { restUser: "rodney", relieverUser: "JERIC" }    // Sun: Rodney RD -> Jeric
+    },
+    3: {
+        1: { restUser: "jeric", relieverUser: "JENESIS" },  // Tue: Jeric RD -> Jenesis
+        6: { restUser: "rodney", relieverUser: "ADRIANE" }  // Sun: Rodney RD -> Adriane
+    }
+};
+
+const rotationStart = new Date(2026, 8, 11); // September 11, 2026
+rotationStart.setHours(0, 0, 0, 0);
+
+/* ============================================================
+   DATE UTILITIES & STATE
+============================================================ */
+let viewMode = "cutoff"; // Default to "cutoff" as requested, or "week", "month"
+let sectionFilter = "all"; // "all", "core", "edge"
+// Default to September 14, 2026
+let currentDate = new Date(2026, 8, 14);
+
+function getMonday(d) {
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    date.setDate(diff);
+    return date;
+}
+
+function addDays(d, days) {
+    const res = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    res.setDate(res.getDate() + days);
+    return res;
+}
+
+function isSameDay(d1, d2) {
+    return d1.getFullYear() === d2.getFullYear() &&
+           d1.getMonth() === d2.getMonth() &&
+           d1.getDate() === d2.getDate();
+}
+
+function getPeriodStart(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    if (day >= 26) return new Date(year, month, 26);
+    if (day >= 11) return new Date(year, month, 11);
+    return new Date(year, month - 1, 26);
+}
+
+function nextPeriodCutoff(date) {
+    if (date.getDate() === 11) return new Date(date.getFullYear(), date.getMonth(), 26);
+    return new Date(date.getFullYear(), date.getMonth() + 1, 11);
+}
+
+function previousPeriodCutoff(date) {
+    if (date.getDate() === 26) return new Date(date.getFullYear(), date.getMonth(), 11);
+    return new Date(date.getFullYear(), date.getMonth() - 1, 26);
+}
+
+function getCutoffInfo(date) {
+    const periodStart = getPeriodStart(date);
+    let rotationIndex = 0;
+
+    if (periodStart.getTime() >= rotationStart.getTime()) {
+        let cursor = new Date(rotationStart);
+        while (cursor.getTime() < periodStart.getTime()) {
+            cursor = nextPeriodCutoff(cursor);
+            rotationIndex++;
+        }
+    } else {
+        let cursor = new Date(rotationStart);
+        while (cursor.getTime() > periodStart.getTime()) {
+            cursor = previousPeriodCutoff(cursor);
+            rotationIndex--;
+        }
+    }
+
+    const patternIndex = ((rotationIndex % 4) + 4) % 4;
+
+    return {
+        pattern: EDGE_PATTERNS[patternIndex],
+        patternNumber: patternIndex + 1,
+        periodStart: periodStart
+    };
+}
+
+/* ============================================================
+   SHIFT RESOLVERS
+============================================================ */
+
+// 1. Zeus Shift Resolver (Core Network)
+function getZeusShift(date) {
+    const day = date.getDay();
+    if (day === 0) { // Sunday
+        return {
+            type: "rest",
+            reliever: null,
+            noReliever: true
         };
+    }
+    return {
+        type: "badge",
+        badgeClass: "day",
+        timeText: "8AM - 5PM",
+        subText: "(ALL SCHEDULE)<br>NO RELIEVER"
+    };
+}
 
-        /* Partition Configurations */
-        const PARTITION_CONFIGS = {
-            "Core Monitoring": { title: "CORE MONITORING TEAM", badgeClass: "core-badge", rowClass: "core-partition", icon: "fa-star" },
-            "Edge Monitoring": { title: "EDGE MONITORING TEAM", badgeClass: "edge-badge", rowClass: "edge-partition", icon: "fa-circle-check" },
-            "Operations":      { title: "OPERATIONS & SUPPORT STAFF", badgeClass: "ops-badge", rowClass: "ops-partition", icon: "fa-layer-group" }
+// 2. Core Shift Resolver
+function getCoreShift(staffKey, date) {
+    if (staffKey === "zeus") return getZeusShift(date);
+
+    const anchor = new Date(2026, 8, 14); // September 14, 2026 (Pattern 1)
+    const diffWeeks = Math.floor((date - anchor) / (7 * 24 * 60 * 60 * 1000));
+    const pIdx = ((diffWeeks % 4) + 4) % 4;
+    const dayIdx = (date.getDay() + 6) % 7; // 0=Mon, ..., 6=Sun
+
+    const pat = CORE_PATTERNS[staffKey];
+    if (!pat) return getZeusShift(date);
+
+    const code = pat[pIdx][dayIdx];
+
+    // Check reliever assignment for this week & day
+    const dayReliever = CORE_RELIEVERS[pIdx]?.[dayIdx];
+    let relName = "";
+    let isReliever = false;
+
+    if (dayReliever) {
+        if (dayReliever.restUser === staffKey) {
+            relName = dayReliever.relieverUser;
+        }
+        if (dayReliever.relieverUser === staffKey.toUpperCase()) {
+            isReliever = true;
+        }
+    }
+
+    // Rest Days
+    if (code === 3) {
+        return {
+            type: "rest",
+            reliever: relName,
+            noReliever: !relName
         };
+    }
 
-        const STORAGE_THEME_KEY = "AMS_THEME_CHOICE";
+    if (code === 2) { // 10PM-6AM
+        return {
+            type: "badge",
+            badgeClass: "night",
+            timeText: "10PM-6AM",
+            subText: isReliever ? "(RELIEVER)" : "(NIGHT)"
+        };
+    } else if (code === 1) { // 2PM-10PM
+        return {
+            type: "badge",
+            badgeClass: "afternoon",
+            timeText: "2PM-10PM",
+            subText: isReliever ? "(RELIEVER)" : "(AFTERNOON)"
+        };
+    } else if (code === 0) { // 6AM-2PM
+        return {
+            type: "badge",
+            badgeClass: "morning",
+            timeText: "6AM-2PM",
+            subText: isReliever ? "(RELIEVER)" : "(MORNING)"
+        };
+    }
 
-        function changeTheme(themeName) {
-            const validThemes = ["midnight", "amethyst", "emerald", "daylight"];
-            if (!validThemes.includes(themeName)) themeName = "midnight";
+    return getZeusShift(date);
+}
 
-            document.documentElement.setAttribute("data-theme", themeName);
-            localStorage.setItem(STORAGE_THEME_KEY, themeName);
+// 3. Edge Shift Resolver
+function getEdgeShift(staffKey, date) {
+    const day = date.getDay();
+    const cutoff = getCutoffInfo(date);
+    const pat = cutoff.pattern;
 
-            const selector = document.getElementById("themeSelector");
-            if (selector && selector.value !== themeName) {
-                selector.value = themeName;
-            }
+    // Rest Day
+    if (day === EDGE_REST_DAYS[staffKey]) {
+        let rel = pat.reliever ? pat.reliever.toUpperCase() : null;
+        return {
+            type: "rest",
+            reliever: rel,
+            noReliever: !rel
+        };
+    }
+
+    // Reliever Logic
+    if (staffKey === pat.reliever) {
+        if (day === EDGE_REST_DAYS[pat.shift6to2]) {
+            return { type: "badge", badgeClass: "morning", timeText: "6AM-2PM", subText: "(RELIEVER)" };
+        }
+        if (day === EDGE_REST_DAYS[pat.shift2to10]) {
+            return { type: "badge", badgeClass: "afternoon", timeText: "2PM-10PM", subText: "(RELIEVER)" };
+        }
+        if (day === EDGE_REST_DAYS[pat.fixed]) {
+            return { type: "badge", badgeClass: "day", timeText: "8AM - 5PM", subText: "(RELIEVER)" };
+        }
+        return { type: "badge", badgeClass: "day", timeText: "8AM - 5PM", subText: "(NORMAL)" };
+    }
+
+    // Fixed 8-5
+    if (staffKey === pat.fixed) {
+        return { type: "badge", badgeClass: "day", timeText: "8AM - 5PM", subText: "(ALL SCHEDULE)<br>NO RELIEVER" };
+    }
+
+    // 6-2 Morning
+    if (staffKey === pat.shift6to2) {
+        return { type: "badge", badgeClass: "morning", timeText: "6AM-2PM", subText: "(MORNING)" };
+    }
+
+    // 2-10 Afternoon
+    if (staffKey === pat.shift2to10) {
+        return { type: "badge", badgeClass: "afternoon", timeText: "2PM-10PM", subText: "(AFTERNOON)" };
+    }
+
+    return { type: "badge", badgeClass: "day", timeText: "8AM - 5PM", subText: "(ALL SCHEDULE)" };
+}
+
+/* ============================================================
+   TABLE RENDERING
+============================================================ */
+function renderTable() {
+    const today = new Date();
+    const days = [];
+    const container = document.getElementById("main-app-container");
+
+    // Apply or remove layout classes
+    container.classList.toggle("is-cutoff-mode", viewMode === "cutoff");
+    container.classList.toggle("is-month-mode", viewMode === "month");
+
+    if (viewMode === "week") {
+        const monday = getMonday(currentDate);
+        for (let i = 0; i < 7; i++) {
+            days.push(addDays(monday, i));
         }
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem(STORAGE_THEME_KEY) || "midnight";
-            changeTheme(savedTheme);
+        const startStr = days[0].toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const endStr = days[6].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        document.getElementById("period-label").textContent = `${startStr} – ${endStr}`;
+    } else if (viewMode === "cutoff") {
+        // Cutoff Mode: Exact 15 days (11-25) or 15-16 days (26-10)
+        const pStart = getPeriodStart(currentDate);
+        let count = 15;
+        if (pStart.getDate() === 26) {
+            const nextP = nextPeriodCutoff(pStart);
+            count = Math.round((nextP - pStart) / (24 * 60 * 60 * 1000));
         }
 
-        /* Storage Keys (v6 — VL = Vacation Leave, L = Late) */
-        const STORAGE_STAFF_KEY = "AMS_STAFF_LIST_V6";
-        const STORAGE_DATA_KEY = "AMS_ATTENDANCE_DATA_V6";
+        for (let i = 0; i < count; i++) {
+            days.push(addDays(pStart, i));
+        }
 
-        /* State Variables */
-        let staffList = [];
-        let attendanceData = {}; // Format: { "YYYY-MM": { "staffId_day": "P" | "L" | "VL" | ... } }
-        let currentMonthStr = ""; // e.g. "2026-10"
-        let daysInMonth = 30;
+        const startStr = days[0].toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        const endStr = days[days.length - 1].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        document.getElementById("period-label").textContent = `Cutoff: ${startStr} – ${endStr}`;
+    } else {
+        // Whole Month Mode: 1st to last day of month
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const totalDays = new Date(year, month + 1, 0).getDate();
 
-        /* ============================================================
-           2. INITIALIZATION & AUTO-LOAD FROM LOCALSTORAGE (WITH MIGRATION)
-        ============================================================ */
-        function initApp() {
-            initTheme();
-            const now = new Date();
-            const yyyy = now.getFullYear();
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            currentMonthStr = `${yyyy}-${mm}`;
-            document.getElementById("month-picker").value = currentMonthStr;
+        for (let i = 1; i <= totalDays; i++) {
+            days.push(new Date(year, month, i));
+        }
 
-            // Load staff list
-            let savedStaff = localStorage.getItem(STORAGE_STAFF_KEY);
-            if (!savedStaff) savedStaff = localStorage.getItem("AMS_STAFF_LIST_V5");
-            let parsedStaff = null;
-            if (savedStaff) {
-                try { parsedStaff = JSON.parse(savedStaff); } catch(e) { parsedStaff = null; }
-            }
+        const monthName = currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        document.getElementById("period-label").textContent = `Whole Month: ${monthName}`;
+    }
 
-            if (Array.isArray(parsedStaff) && parsedStaff.length > 0) {
-                staffList = parsedStaff;
-                let staffUpdated = false;
-                staffList.forEach(s => {
-                    if (s.dept && (s.dept.toLowerCase().includes("network") || s.dept.toLowerCase().includes("core network"))) {
-                        s.dept = "Core Monitoring";
-                        staffUpdated = true;
-                    }
-                    if (s.name && s.name.toLowerCase().includes("gino parala") && s.dept !== "Core Monitoring") {
-                        s.dept = "Core Monitoring";
-                        staffUpdated = true;
-                    }
-                });
-                if (staffUpdated) {
-                    localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
-                }
+    const midDate = days[Math.floor(days.length / 2)];
+    const edgeCutoff = getCutoffInfo(midDate);
+    document.getElementById("pattern-status-text").textContent = 
+        `Core Network Active • Edge Pattern ${edgeCutoff.patternNumber} (${edgeCutoff.periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" })} Cutoff)`;
+
+    // 1. Header Dates
+    const headerRow = document.getElementById("header-row");
+    let headerHTML = `<th class="col-name-th">NAME</th>`;
+
+    days.forEach(d => {
+        const dayName = d.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+        const dateStr = viewMode === "week"
+            ? d.toLocaleDateString("en-US", { month: "long", day: "numeric" })
+            : `${d.toLocaleDateString("en-US", { month: "short" })} ${d.getDate()}`;
+        const isToday = isSameDay(d, today);
+
+        headerHTML += `
+            <th class="${isToday ? 'is-today' : ''}">
+                <div class="day-header-cell">
+                    <span class="day-header-name">${dayName}</span>
+                    <span class="day-header-date">${dateStr}</span>
+                </div>
+            </th>
+        `;
+    });
+    headerRow.innerHTML = headerHTML;
+
+    // 2. Build Table Body
+    const tbody = document.getElementById("roster-tbody");
+    tbody.innerHTML = "";
+    const totalCols = days.length + 1;
+
+    // Helper to render an employee row
+    function appendStaffRow(staff, isEdge) {
+        const tr = document.createElement("tr");
+        if (staff.isAccent) tr.className = "row-accent";
+
+        let rowHTML = `<td class="col-name">${staff.name}</td>`;
+
+        days.forEach(d => {
+            const isToday = isSameDay(d, today);
+            const shiftInfo = isEdge ? getEdgeShift(staff.key, d) : getCoreShift(staff.key, d);
+
+            let cellContent = "";
+            if (shiftInfo.type === "rest") {
+                cellContent = `
+                    <div class="rest-day-box">
+                        <span class="rest-day-title">REST DAY</span>
+                        ${shiftInfo.reliever ? `
+                            <span class="rest-reliever-label">Reliever:</span>
+                            <span class="rest-reliever-name">${shiftInfo.reliever}</span>
+                        ` : `
+                            <span class="no-reliever-text">NO RELIEVER</span>
+                        `}
+                    </div>
+                `;
             } else {
-                staffList = JSON.parse(JSON.stringify(DEFAULT_STAFF));
-                localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
-            }
-
-            // Load attendance data with automatic status migration:
-            let savedData = localStorage.getItem(STORAGE_DATA_KEY);
-            if (!savedData) {
-                const oldData = localStorage.getItem("AMS_ATTENDANCE_DATA_V5") || localStorage.getItem("AMS_ATTENDANCE_DATA");
-                if (oldData) {
-                    try {
-                        const parsed = JSON.parse(oldData);
-                        Object.keys(parsed).forEach(mKey => {
-                            if (parsed[mKey] && typeof parsed[mKey] === 'object') {
-                                Object.keys(parsed[mKey]).forEach(cellKey => {
-                                    if (cellKey.endsWith("_note")) return;
-                                    const code = parsed[mKey][cellKey];
-                                    if (code === "LT") parsed[mKey][cellKey] = "L";   // LT -> L (Late)
-                                    else if (code === "L") parsed[mKey][cellKey] = "VL"; // old L -> VL (Vacation Leave)
-                                });
-                            }
-                        });
-                        attendanceData = parsed;
-                        localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(attendanceData));
-                    } catch(e) { attendanceData = {}; }
-                }
-            } else {
-                try { attendanceData = JSON.parse(savedData); }
-                catch(e) { attendanceData = {}; }
-            }
-
-            renderTable();
-        }
-
-        /* ============================================================
-           3. AUTO-SAVE FUNCTIONALITY
-        ============================================================ */
-        function triggerAutoSave(customMsg) {
-            if (attendanceData) {
-                localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(attendanceData));
-            }
-            if (Array.isArray(staffList) && staffList.length > 0) {
-                localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
-            }
-
-            const badge = document.getElementById("autosave-indicator");
-            const textElem = document.getElementById("autosave-text");
-
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            textElem.textContent = customMsg || `Auto-Saved (${timeStr})`;
-            badge.style.background = "rgba(16, 185, 129, 0.25)";
-            badge.style.borderColor = "#10b981";
-
-            setTimeout(() => {
-                badge.style.background = "rgba(16, 185, 129, 0.1)";
-                badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-            }, 1000);
-        }
-
-        /* ============================================================
-           4. TABLE RENDERING WITH PARTITIONS
-        ============================================================ */
-        function getDaysForSelectedMonth() {
-            const [year, month] = currentMonthStr.split("-").map(Number);
-            const date = new Date(year, month, 0);
-            return date.getDate();
-        }
-
-        function autoFillRestDays() {
-            const [yearStr, monthStr] = currentMonthStr.split("-");
-            const yearNum = parseInt(yearStr, 10);
-            const monthNum = parseInt(monthStr, 10) - 1;
-            const totalDays = new Date(yearNum, monthNum + 1, 0).getDate();
-
-            if (!attendanceData[currentMonthStr]) {
-                attendanceData[currentMonthStr] = {};
-            }
-            const monthData = attendanceData[currentMonthStr];
-
-            staffList.forEach(staff => {
-                const rdNum = REST_DAY_MAP[staff.restDay];
-                if (rdNum === undefined) return;
-
-                for (let d = 1; d <= totalDays; d++) {
-                    const dayDate = new Date(yearNum, monthNum, d);
-                    if (dayDate.getDay() === rdNum) {
-                        const key = `${staff.id}_${d}`;
-                        if (!monthData[key]) {
-                            monthData[key] = "RD";
-                        }
-                    }
-                }
-            });
-
-            localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(attendanceData));
-        }
-
-        function renderTable() {
-            daysInMonth = getDaysForSelectedMonth();
-            autoFillRestDays();
-            const cutoff = document.getElementById("cutoff-filter").value;
-
-            let startDay = 1;
-            let endDay = daysInMonth;
-
-            if (cutoff === "1-15") {
-                endDay = Math.min(15, daysInMonth);
-            } else if (cutoff === "16-end") {
-                startDay = 16;
-            }
-
-            // 1. Build Header Row (Includes separate P and L columns)
-            const headerRow = document.getElementById("table-header-row");
-            let headerHTML = `<th class="col-emp-name">STAFF NAME (${staffList.length})</th>`;
-
-            const [yearStr, monthStr] = currentMonthStr.split("-");
-            const yearNum = parseInt(yearStr, 10);
-            const monthNum = parseInt(monthStr, 10) - 1;
-
-            for (let d = startDay; d <= endDay; d++) {
-                const dayDate = new Date(yearNum, monthNum, d);
-                const dayName = dayDate.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-                const isWeekend = (dayDate.getDay() === 0 || dayDate.getDay() === 6);
-
-                headerHTML += `
-                    <th style="${isWeekend ? 'background-color: #202b3d; color: #f59e0b;' : ''}">
-                        <div>${d}</div>
-                        <div style="font-size: 10px; opacity: 0.75;">${dayName}</div>
-                    </th>
+                cellContent = `
+                    <div class="badge-pill ${shiftInfo.badgeClass}">
+                        ${shiftInfo.timeText}
+                    </div>
+                    <div class="shift-subtitle">
+                        ${shiftInfo.subText}
+                    </div>
                 `;
             }
 
-            // Append summary headers: P | L | A | VL | HD | RD | HDty | HND | Total | %
-            headerHTML += `
-                <th class="col-summary" style="background:#064e3b; color:#34d399;"   title="Present (P)">P</th>
-                <th class="col-summary" style="background:#431407; color:#fb923c;"   title="Late (L) - Counted as 100% Present in Attendance">L</th>
-                <th class="col-summary" style="background:#7f1d1d; color:#f87171;"   title="Absent (A)">A</th>
-                <th class="col-summary" style="background:#78350f; color:#fbbf24;"   title="Vacation Leave (VL)">VL</th>
-                <th class="col-summary" style="background:#4c1d95; color:#c084fc;"   title="Halfday (HD)">HD</th>
-                <th class="col-summary" style="background:#1e293b; color:#94a3b8;"   title="Restday (RD)">RD</th>
-                <th class="col-summary" style="background:#164e63; color:#22d3ee;"   title="Holiday Duty (HDty)">HDty</th>
-                <th class="col-summary" style="background:#334155; color:#cbd5e1;"   title="Holiday No Duty (HND)">HND</th>
-                <th class="col-summary" style="background:#1e1b4b; color:#a5b4fc;"   title="Total Present Points / Total Duty Days">Total</th>
-                <th class="col-summary col-pct" style="background:#312e81; color:#c7d2fe; min-width: 65px;" title="Attendance Percentage (Late is considered 100% Present)">%</th>
-            `;
+            rowHTML += `<td class="shift-cell ${isToday ? 'is-today-col' : ''}">${cellContent}</td>`;
+        });
+
+        tr.innerHTML = rowHTML;
+        tbody.appendChild(tr);
+    }
+
+    // Helper to append a Section Header
+    function appendSectionHeader(title, badgeText, badgeClass, hdrClass) {
+        const tr = document.createElement("tr");
+        tr.className = `section-hdr-row ${hdrClass}`;
+        tr.innerHTML = `
+            <td colspan="${totalCols}">
+                <span class="section-badge ${badgeClass}">${badgeText}</span>
+                ${title}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    // Render Sections based on filter
+    if (sectionFilter === "all" || sectionFilter === "core") {
+        appendSectionHeader("CORE NETWORK MONITORING", "CORE TEAM", "core-badge", "core-hdr");
+        CORE_STAFF.forEach(staff => appendStaffRow(staff, false));
+    }
+
+    if (sectionFilter === "all" || sectionFilter === "edge") {
+        appendSectionHeader("EDGE NETWORK MONITORING", "EDGE TEAM", "edge-badge", "edge-hdr");
+        EDGE_STAFF.forEach(staff => appendStaffRow(staff, true));
+    }
+}
+
+/* ============================================================
+   CONTROLS & NAVIGATION
+============================================================ */
+function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById("btn-view-week").classList.toggle("active", mode === "week");
+    document.getElementById("btn-view-cutoff").classList.toggle("active", mode === "cutoff");
+    document.getElementById("btn-view-month").classList.toggle("active", mode === "month");
+    renderTable();
+}
+
+function setSectionFilter(filter) {
+    sectionFilter = filter;
+    document.getElementById("btn-tab-all").classList.toggle("active", filter === "all");
+    document.getElementById("btn-tab-core").classList.toggle("active", filter === "core");
+    document.getElementById("btn-tab-edge").classList.toggle("active", filter === "edge");
+    renderTable();
+}
+
+function prevPeriod() {
+    if (viewMode === "week") {
+        currentDate = addDays(currentDate, -7);
+    } else if (viewMode === "cutoff") {
+        currentDate = previousPeriodCutoff(getPeriodStart(currentDate));
+    } else {
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    }
+    renderTable();
+}
+
+function nextPeriod() {
+    if (viewMode === "week") {
+        currentDate = addDays(currentDate, 7);
+    } else if (viewMode === "cutoff") {
+        currentDate = nextPeriodCutoff(getPeriodStart(currentDate));
+    } else {
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    }
+    renderTable();
+}
+
+function goToTargetDate() {
+    currentDate = new Date(2026, 8, 14); // September 14, 2026
+    renderTable();
+}
+
+function goToToday() {
+    currentDate = new Date();
+    renderTable();
+}
+
+function exportSchedule() {
+    const el = document.getElementById("schedule-capture-area");
+    if (!el) return;
+
+    html2canvas(el, {
+        scale: 2,
+        backgroundColor: "#131722",
+        logging: false
+    }).then(canvas => {
+        const link = document.createElement("a");
+        const label = document.getElementById("period-label").textContent.replace(/[^a-zA-Z0-9]/g, "_");
+        link.download = `NMOC_Schedule_${label}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+document.addEventListener("DOMContentLoaded", renderTable);
+renderTable();
+</script>
 
-            headerRow.innerHTML = headerHTML;
-
-            // 2. Group Staff by Department for Partitions
-            const tbody = document.getElementById("table-body");
-            tbody.innerHTML = "";
-
-            const monthData = attendanceData[currentMonthStr] || {};
-            const searchFilter = document.getElementById("search-input").value.toLowerCase().trim();
-            const deptFilter = document.getElementById("dept-filter").value;
-
-            const totalCols = (endDay - startDay + 1) + 11; // Name + Days + 8 Summary Counts + Total + %
-
-            const grouped = {};
-            const deptOrder = ["Core Monitoring", "Edge Monitoring", "Operations"];
-
-            staffList.forEach(staff => {
-                let dept = staff.dept || "Operations";
-                if (dept.toLowerCase().includes("network")) {
-                    dept = "Core Monitoring";
-                    staff.dept = "Core Monitoring";
-                }
-                if (!grouped[dept]) grouped[dept] = [];
-                grouped[dept].push(staff);
-            });
-
-            const allDepts = Array.from(new Set([...deptOrder, ...Object.keys(grouped)]));
-
-            allDepts.forEach(deptKey => {
-                if (deptFilter !== "all" && deptFilter !== deptKey) return;
-
-                const list = grouped[deptKey] || [];
-                const filteredList = list.filter(staff => {
-                    if (!searchFilter) return true;
-                    return staff.name.toLowerCase().includes(searchFilter) || staff.dept.toLowerCase().includes(searchFilter);
-                });
-
-                if (filteredList.length === 0) return;
-
-                const cfg = PARTITION_CONFIGS[deptKey] || {
-                    title: `${deptKey.toUpperCase()} STAFF`,
-                    badgeClass: "ops-badge",
-                    rowClass: "ops-partition",
-                    icon: "fa-users"
-                };
-
-                let btnClass = "core-btn";
-                let btnText = "Add Core Member";
-                if (deptKey === "Edge Monitoring") {
-                    btnClass = "edge-btn";
-                    btnText = "Add Edge Member";
-                } else if (deptKey === "Operations") {
-                    btnClass = "ops-btn";
-                    btnText = "Add Ops Member";
-                }
-
-                const partitionTr = document.createElement("tr");
-                partitionTr.className = `section-partition-row ${cfg.rowClass}`;
-                partitionTr.innerHTML = `
-                    <td colspan="${totalCols}">
-                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                            <div>
-                                <span class="partition-badge ${cfg.badgeClass}">
-                                    <i class="fa-solid ${cfg.icon}"></i> ${deptKey.toUpperCase()}
-                                </span>
-                                ${cfg.title} (${filteredList.length} Members)
-                            </div>
-                            <button class="btn-partition-add ${btnClass}" onclick="quickAddMember('${deptKey}')">
-                                <i class="fa-solid fa-user-plus"></i> + ${btnText}
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(partitionTr);
-
-                let deptTotalPresent = 0, deptTotalDuty = 0;
-
-                filteredList.forEach(staff => {
-                    const tr = document.createElement("tr");
-
-                    let rowHTML = `
-                        <td class="col-emp-name">
-                            <div class="emp-name-wrapper">
-                                <input type="text" 
-                                       class="emp-name-input" 
-                                       value="${escapeHtml(staff.name)}" 
-                                       placeholder="Insert Name..." 
-                                       title="Click to edit name directly"
-                                       onchange="updateStaffNameInline(${staff.id}, this.value)"
-                                       onkeydown="if(event.key === 'Enter') this.blur()">
-                                 <i class="fa-solid fa-pen emp-edit-icon" title="Click to edit name"></i>
-                                 <button class="btn-staff-delete" onclick="deleteStaffMember(${staff.id})" title="Delete ${escapeHtml(staff.name)}">
-                                     <i class="fa-solid fa-trash-can"></i>
-                                 </button>
-                            </div>
-                            <span class="emp-meta">${escapeHtml(staff.dept || 'Staff')}</span>
-                        </td>
-                    `;
-
-                    let countP = 0, countL = 0, countA = 0, countVL = 0, countHD = 0, countRD = 0, countHDty = 0, countHND = 0;
-
-                    for (let d = startDay; d <= endDay; d++) {
-                        const key = `${staff.id}_${d}`;
-                        const val = monthData[key] || "";
-
-                        if (val === "P")            countP++;
-                        else if (val === "L" || val === "LT") countL++; // L (Late)
-                        else if (val === "A")       countA++;
-                        else if (val === "VL")      countVL++; // VL (Vacation Leave)
-                        else if (val === "HD")      countHD++;
-                        else if (val === "RD")      countRD++;
-                        else if (val === "HDty")    countHDty++;
-                        else if (val === "HND")     countHND++;
-
-                        const noteKey = `${staff.id}_${d}_note`;
-                        const noteVal = monthData[noteKey] || "";
-
-                        rowHTML += `
-                            <td class="day-box-cell">
-                                <div class="day-box-container">
-                                    <select class="status-select" 
-                                            data-status="${val}" 
-                                            onchange="onStatusChange(${staff.id}, ${d}, this.value, this)">
-                                        ${STATUS_OPTIONS.map(opt => `
-                                            <option value="${opt.code}" ${opt.code === val ? 'selected' : ''}>
-                                                ${opt.code || '-'}
-                                            </option>
-                                        `).join('')}
-                                    </select>
-                                    <div class="day-note-wrap">
-                                        <input type="text" 
-                                               class="day-note-inp ${noteVal ? 'has-note' : ''}" 
-                                               placeholder="+ Note" 
-                                               value="${escapeHtml(noteVal)}" 
-                                               title="${escapeHtml(noteVal ? 'Note: ' + noteVal : 'Click to add note (Double-click to expand)')}" 
-                                               oninput="onNoteInput(${staff.id}, ${d}, this.value, this)" 
-                                               onchange="onNoteChange(${staff.id}, ${d}, this.value, this)"
-                                               ondblclick="onNoteDblClick(${staff.id}, ${d}, this)"
-                                               onkeydown="if(event.key==='Enter') this.blur()">
-                                    ${noteVal ? `<button class="btn-note-clear" onclick="clearDayNote(${staff.id}, ${d})" title="Delete note">&times;</button>` : ''}
-                                    </div>
-                                </div>
-                            </td>
-                        `;
-                    }
-
-                    // ── Per-person attendance calculation ──────────────────────
-                    const dutyDays   = countP + countL + countA + countVL + countHD;
-                    const presentVal = countP + countL + (countHD * 0.5);
-                    const pDisplay   = (presentVal % 1 === 0) ? presentVal.toFixed(0) : presentVal.toFixed(1);
-                    const attLabel   = dutyDays > 0 ? `${pDisplay}/${dutyDays}` : `—`;
-
-                    const pctNum = dutyDays > 0 ? (presentVal / dutyDays) * 100 : null;
-                    const pctStr = pctNum !== null ? `${pctNum.toFixed(1)}%` : `—`;
-
-                    let pctClass = "pct-neutral";
-                    if (pctNum !== null) {
-                        if (pctNum >= 95)      pctClass = "pct-excellent";
-                        else if (pctNum >= 90) pctClass = "pct-good";
-                        else if (pctNum >= 80) pctClass = "pct-warning";
-                        else                   pctClass = "pct-danger";
-                    }
-
-                    deptTotalPresent += presentVal;
-                    deptTotalDuty    += dutyDays;
-
-                    // Summary Columns: P | L | A | VL | HD | RD | HDty | HND | Total | %
-                    rowHTML += `
-                        <td><span class="count-badge p-cnt">${countP}</span></td>
-                        <td><span class="count-badge l-cnt">${countL}</span></td>
-                        <td><span class="count-badge a-cnt">${countA}</span></td>
-                        <td><span class="count-badge vl-cnt">${countVL}</span></td>
-                        <td><span class="count-badge hd-cnt">${countHD}</span></td>
-                        <td><span class="count-badge rd-cnt">${countRD}</span></td>
-                        <td><span class="count-badge hdty-cnt">${countHDty}</span></td>
-                        <td><span class="count-badge hnd-cnt">${countHND}</span></td>
-                        <td class="att-summary-cell"><span class="att-rate">${attLabel}</span></td>
-                        <td class="att-summary-cell"><span class="att-pct-badge ${pctClass}">${pctStr}</span></td>
-                    `;
-
-                    tr.innerHTML = rowHTML;
-                    tbody.appendChild(tr);
-                });
-
-                // ── Section total footer row ────────────────────────────────────
-                const deptPDisplay = (deptTotalPresent % 1 === 0)
-                    ? deptTotalPresent.toFixed(0)
-                    : deptTotalPresent.toFixed(1);
-                const deptRate = deptTotalDuty > 0
-                    ? `${deptPDisplay}/${deptTotalDuty}`
-                    : `—`;
-
-                const totalTr = document.createElement("tr");
-                totalTr.className = "section-total-row";
-                let totalRowHTML = `<td class="lbl" colspan="${(endDay - startDay + 1) + 1}">
-                    <i class="fa-solid fa-sigma" style="margin-right:6px; color:#818cf8;"></i>
-                    ${deptKey} Team Total &nbsp;(${filteredList.length} staff)
-                </td>`;
-
-                const deptPctNum = deptTotalDuty > 0 ? (deptTotalPresent / deptTotalDuty) * 100 : null;
-                const deptPctStr = deptPctNum !== null ? `${deptPctNum.toFixed(1)}%` : `—`;
-                let deptPctClass = "pct-neutral";
-                if (deptPctNum !== null) {
-                    if (deptPctNum >= 95)      deptPctClass = "pct-excellent";
-                    else if (deptPctNum >= 90) deptPctClass = "pct-good";
-                    else if (deptPctNum >= 80) deptPctClass = "pct-warning";
-                    else                       deptPctClass = "pct-danger";
-                }
-
-                // 8 count summary cols + Total + % on right side
-                totalRowHTML += `
-                    <td colspan="8"></td>
-                    <td class="att-summary-cell"><span class="total-rate">${deptRate}</span></td>
-                    <td class="att-summary-cell"><span class="total-rate ${deptPctClass}">${deptPctStr}</span></td>
-                `;
-                totalTr.innerHTML = totalRowHTML;
-                tbody.appendChild(totalTr);
-            });
-
-            updateOverallStats();
-        }
-
-        /* ============================================================
-           5. EVENT HANDLERS & STATUS UPDATES (AUTO-SAVE TRIGGER)
-        ============================================================ */
-        function updateStaffNameInline(staffId, newName) {
-            const trimmed = newName.trim();
-            const target = staffList.find(s => s.id === staffId);
-            if (target) {
-                const finalName = trimmed || `Staff ${staffId}`;
-                if (target.name !== finalName) {
-                    target.name = finalName;
-                    triggerAutoSave(`Updated name: ${finalName}`);
-                }
-            }
-        }
-
-        let noteSaveTimeout = null;
-        function onNoteInput(staffId, day, newNote, inputElem) {
-            if (!attendanceData[currentMonthStr]) {
-                attendanceData[currentMonthStr] = {};
-            }
-            const noteKey = `${staffId}_${day}_note`;
-            const trimmed = newNote ? newNote.trim() : "";
-            if (trimmed !== "") {
-                attendanceData[currentMonthStr][noteKey] = trimmed;
-                inputElem.classList.add("has-note");
-                inputElem.title = `Note: ${trimmed} (Double-click to expand)`;
-            } else {
-                delete attendanceData[currentMonthStr][noteKey];
-                inputElem.classList.remove("has-note");
-                inputElem.title = "Click to add note (Double-click to expand)";
-            }
-
-            clearTimeout(noteSaveTimeout);
-            noteSaveTimeout = setTimeout(() => {
-                triggerAutoSave("Notes Saved");
-            }, 600);
-        }
-
-        function onNoteChange(staffId, day, newNote, inputElem) {
-            onNoteInput(staffId, day, newNote, inputElem);
-            triggerAutoSave("Note Saved");
-        }
-
-        function onNoteDblClick(staffId, day, inputElem) {
-            const current = inputElem.value || "";
-            const promptVal = prompt(`Enter note for Day ${day}:`, current);
-            if (promptVal !== null) {
-                inputElem.value = promptVal;
-                onNoteChange(staffId, day, promptVal, inputElem);
-            }
-        }
-
-        function deleteStaffMember(staffId) {
-            const staff = staffList.find(s => s.id === staffId);
-            const staffName = staff ? staff.name : "this staff member";
-            if (confirm(`Are you sure you want to delete ${staffName} from attendance monitoring?`)) {
-                staffList = staffList.filter(s => s.id !== staffId);
-                triggerAutoSave(`Deleted staff: ${staffName}`);
-                renderTable();
-            }
-        }
-
-        function clearDayNote(staffId, day) {
-            if (!attendanceData[currentMonthStr]) return;
-            const noteKey = `${staffId}_${day}_note`;
-            delete attendanceData[currentMonthStr][noteKey];
-            triggerAutoSave("Note Deleted");
-            renderTable();
-        }
-
-        function clearMonthAttendance() {
-            if (confirm(`Are you sure you want to delete all attendance records and notes for ${currentMonthStr}? This cannot be undone.`)) {
-                delete attendanceData[currentMonthStr];
-                triggerAutoSave("Month Attendance Cleared");
-                renderTable();
-            }
-        }
-
-        function onStatusChange(staffId, day, newStatus, selectElem) {
-            if (!attendanceData[currentMonthStr]) {
-                attendanceData[currentMonthStr] = {};
-            }
-
-            const key = `${staffId}_${day}`;
-            if (newStatus) {
-                attendanceData[currentMonthStr][key] = newStatus;
-            } else {
-                delete attendanceData[currentMonthStr][key];
-            }
-
-            selectElem.setAttribute("data-status", newStatus);
-            triggerAutoSave();
-            renderTable();
-        }
-
-        function onMonthChange() {
-            currentMonthStr = document.getElementById("month-picker").value;
-            renderTable();
-        }
-
-        function onCutoffChange() {
-            renderTable();
-        }
-
-        function onDeptFilterChange() {
-            renderTable();
-        }
-
-        function filterTable() {
-            renderTable();
-        }
-
-        function markAllToday(status) {
-            const today = new Date();
-            const currentDay = today.getDate();
-
-            if (!attendanceData[currentMonthStr]) {
-                attendanceData[currentMonthStr] = {};
-            }
-
-            staffList.forEach(staff => {
-                attendanceData[currentMonthStr][`${staff.id}_${currentDay}`] = status;
-            });
-
-            triggerAutoSave(`Marked All ${status} for Day ${currentDay}`);
-            renderTable();
-        }
-
-        /* ============================================================
-           6. CALCULATE OVERALL STATS
-        ============================================================ */
-        function updateOverallStats() {
-            const monthData = attendanceData[currentMonthStr] || {};
-            let p = 0, l = 0, a = 0, vl = 0, hd = 0, rd = 0, hdty = 0, hnd = 0;
-
-            Object.values(monthData).forEach(val => {
-                if (val === "P")            p++;
-                else if (val === "L" || val === "LT") l++; // L (Late)
-                else if (val === "A")       a++;
-                else if (val === "VL")      vl++; // VL (Vacation Leave)
-                else if (val === "HD")      hd++;
-                else if (val === "RD")      rd++;
-                else if (val === "HDty")    hdty++;
-                else if (val === "HND")     hnd++;
-            });
-
-            document.getElementById("total-present").textContent = p;
-            const elLate = document.getElementById("total-late");
-            if (elLate) elLate.textContent = l;
-            document.getElementById("total-absent").textContent = a;
-            document.getElementById("total-leave").textContent = vl;
-            document.getElementById("total-halfday").textContent = hd;
-            document.getElementById("total-restday").textContent = rd;
-            document.getElementById("total-hduty").textContent = hdty;
-            document.getElementById("total-hnoduty").textContent = hnd;
-        }
-
-        /* ============================================================
-           7. EXPORT TO CSV & BACKUP JSON
-        ============================================================ */
-        function exportToCSV() {
-            const days = getDaysForSelectedMonth();
-            let csv = [];
-
-            let headers = ["Staff ID", "Staff Name", "Department"];
-            for (let d = 1; d <= days; d++) headers.push(`Day ${d}`);
-            headers.push("Total P", "Total L", "Total A", "Total VL", "Total HD", "Total RD", "Total HDty", "Total HND", "Total", "%");
-            csv.push(headers.join(","));
-
-            const monthData = attendanceData[currentMonthStr] || {};
-
-            staffList.forEach(staff => {
-                let row = [`"${staff.id}"`, `"${staff.name}"`, `"${staff.dept || ''}"`];
-                let countP = 0, countL = 0, countA = 0, countVL = 0, countHD = 0, countRD = 0, countHDty = 0, countHND = 0;
-
-                for (let d = 1; d <= days; d++) {
-                    const val = monthData[`${staff.id}_${d}`] || "";
-                    const note = monthData[`${staff.id}_${d}_note`] || "";
-                    const cellContent = note ? (val ? `${val} (${note})` : `[${note}]`) : val;
-                    row.push(`"${cellContent}"`);
-                    if (val === "P") countP++;
-                    else if (val === "L" || val === "LT") countL++;
-                    else if (val === "A") countA++;
-                    else if (val === "VL") countVL++;
-                    else if (val === "HD") countHD++;
-                    else if (val === "RD") countRD++;
-                    else if (val === "HDty") countHDty++;
-                    else if (val === "HND") countHND++;
-                }
-
-                const dutyDays   = countP + countL + countA + countVL + countHD;
-                const presentVal = countP + countL + (countHD * 0.5);
-                const pDisplay   = (presentVal % 1 === 0) ? presentVal.toFixed(0) : presentVal.toFixed(1);
-                const attLabel   = dutyDays > 0 ? `${pDisplay}/${dutyDays}` : `—`;
-                const pctStr     = dutyDays > 0 ? `${((presentVal / dutyDays) * 100).toFixed(1)}%` : `—`;
-
-                row.push(countP, countL, countA, countVL, countHD, countRD, countHDty, countHND, `"${attLabel}"`, `"${pctStr}"`);
-                csv.push(row.join(","));
-            });
-
-            const blob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Attendance_${currentMonthStr}.csv`;
-            link.click();
-        }
-
-        function exportJSONBackup() {
-            const backupPayload = {
-                version: "1.0",
-                exportedAt: new Date().toISOString(),
-                staffList: staffList,
-                attendanceData: attendanceData
-            };
-
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupPayload, null, 2));
-            const downloadAnchor = document.createElement("a");
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `Attendance_Backup_${currentMonthStr}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
-
-        function importJSONBackup(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (parsed.staffList) {
-                        staffList = parsed.staffList.map(s => {
-                            if (s.dept && s.dept.toLowerCase().includes("network")) {
-                                s.dept = "Core Monitoring";
-                            }
-                            return s;
-                        });
-                    }
-                    if (parsed.attendanceData) attendanceData = parsed.attendanceData;
-
-                    triggerAutoSave("Backup Restored Successfully!");
-                    renderTable();
-                    alert("✅ Attendance Data imported successfully!");
-                } catch(err) {
-                    alert("❌ Invalid JSON backup file!");
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        /* ============================================================
-           8. STAFF MANAGEMENT MODAL
-        ============================================================ */
-        function openStaffModal() {
-            const container = document.getElementById("staff-editor-list");
-            container.innerHTML = "";
-
-            staffList.forEach((staff, index) => {
-                const item = document.createElement("div");
-                item.className = "staff-edit-item";
-                item.innerHTML = `
-                    <span style="font-size:11px; color:var(--text-muted); width:20px;">${index+1}.</span>
-                    <input type="text" value="${escapeHtml(staff.name)}" placeholder="Staff Name" data-idx="${index}" class="staff-name-inp">
-                    <select class="staff-dept-inp select-input" style="width:140px; padding:4px 8px; font-size:12px;">
-                        <option value="Core Monitoring" ${staff.dept === 'Core Monitoring' ? 'selected' : ''}>Core Monitoring</option>
-                        <option value="Edge Monitoring" ${staff.dept === 'Edge Monitoring' ? 'selected' : ''}>Edge Monitoring</option>
-                        <option value="Operations" ${staff.dept === 'Operations' ? 'selected' : ''}>Operations</option>
-                    </select>
-                    <button class="modal-close" onclick="removeStaffMember(${index})" title="Remove"><i class="fa-solid fa-trash-can" style="color:#f87171; font-size:14px;"></i></button>
-                `;
-                container.appendChild(item);
-            });
-
-            document.getElementById("staff-modal").classList.add("active");
-        }
-
-        function closeStaffModal() {
-            document.getElementById("staff-modal").classList.remove("active");
-        }
-
-        function quickAddMember(dept) {
-            const newId = staffList.length > 0 ? Math.max(...staffList.map(s => s.id)) + 1 : 1;
-            const deptLabel = dept === 'Core Monitoring' ? 'Core' : (dept === 'Edge Monitoring' ? 'Edge' : 'Ops');
-            const defaultName = prompt(`Enter name for new ${dept} member:`, `Insert ${deptLabel} Name`);
-            if (defaultName !== null && defaultName.trim() !== '') {
-                staffList.push({ id: newId, name: defaultName.trim(), dept: dept });
-                triggerAutoSave(`Added new ${dept} member: ${defaultName.trim()}`);
-                renderTable();
-            }
-        }
-
-        function addStaffMember(dept = "Core Monitoring") {
-            const newId = staffList.length > 0 ? Math.max(...staffList.map(s => s.id)) + 1 : 1;
-            const deptLabel = dept === 'Core Monitoring' ? 'Core' : (dept === 'Edge Monitoring' ? 'Edge' : 'Ops');
-            staffList.push({ id: newId, name: `Insert ${deptLabel} Name`, dept: dept });
-            openStaffModal();
-        }
-
-        function removeStaffMember(index) {
-            if (confirm(`Remove "${staffList[index].name}" from attendance?`)) {
-                staffList.splice(index, 1);
-                openStaffModal();
-            }
-        }
-
-        function saveStaffNames() {
-            const nameInputs = document.querySelectorAll(".staff-name-inp");
-            const deptInputs = document.querySelectorAll(".staff-dept-inp");
-
-            nameInputs.forEach((inp, idx) => {
-                if (staffList[idx]) {
-                    staffList[idx].name = inp.value.trim() || `Staff ${idx+1}`;
-                    staffList[idx].dept = deptInputs[idx].value || 'Operations';
-                }
-            });
-
-            triggerAutoSave("Staff List Updated!");
-            closeStaffModal();
-            renderTable();
-        }
-
-        function escapeHtml(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-
-        /* Initial Execution */
-        document.addEventListener("DOMContentLoaded", initApp);
-    </script>
 </body>
 </html>
