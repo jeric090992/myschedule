@@ -1872,6 +1872,103 @@
     ══════════════════════════════════════════════════════════════ -->
     <script>
         /* ============================================================
+           CLOUD SYNC — GOOGLE SHEETS VIA APPS SCRIPT
+           ─────────────────────────────────────────────────────────
+           Paste your deployed Apps Script Web App URL below.
+           Leave blank ("") to run in local-only mode.
+        ============================================================ */
+        const APPS_SCRIPT_URL = ""; // ← PASTE YOUR WEB APP URL HERE
+
+        let cloudSyncEnabled = APPS_SCRIPT_URL.length > 10;
+        let cloudSaveTimer   = null;
+
+        /**
+         * Load attendance + staff data from Google Sheets.
+         * Returns a promise resolving to { attendanceData, staffList } or null on error.
+         */
+        async function cloudLoad() {
+            if (!cloudSyncEnabled) return null;
+            try {
+                const resp = await fetch(APPS_SCRIPT_URL + "?action=load", { method: "GET" });
+                if (!resp.ok) return null;
+                const json = await resp.json();
+                if (json.error) { console.warn("Cloud load error:", json.error); return null; }
+                return json;
+            } catch(e) {
+                console.warn("Cloud load failed (offline?):", e.message);
+                return null;
+            }
+        }
+
+        /**
+         * Push attendance + staff data to Google Sheets.
+         * Debounced — waits 2 s after the last change before sending.
+         */
+        function cloudSave() {
+            if (!cloudSyncEnabled) return;
+            if (cloudSaveTimer) clearTimeout(cloudSaveTimer);
+            cloudSaveTimer = setTimeout(async () => {
+                setCloudBadge("syncing");
+                try {
+                    const body = JSON.stringify({
+                        action: "save",
+                        data: {
+                            attendanceData: attendanceData,
+                            staffList:      staffList
+                        }
+                    });
+                    const resp = await fetch(APPS_SCRIPT_URL, {
+                        method:  "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body:    body
+                    });
+                    const json = await resp.json();
+                    if (json.ok) {
+                        setCloudBadge("saved");
+                    } else {
+                        setCloudBadge("error");
+                        console.warn("Cloud save error:", json.error);
+                    }
+                } catch(e) {
+                    setCloudBadge("error");
+                    console.warn("Cloud save failed:", e.message);
+                }
+            }, 2000);
+        }
+
+        function setCloudBadge(state) {
+            const badge = document.getElementById("autosave-indicator");
+            const text  = document.getElementById("autosave-text");
+            if (!badge || !text) return;
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            if (state === "syncing") {
+                text.textContent = "☁ Syncing to Cloud…";
+                badge.style.background  = "rgba(251,191,36,0.2)";
+                badge.style.borderColor = "#fbbf24";
+            } else if (state === "saved") {
+                text.textContent = `☁ Cloud Saved (${timeStr})`;
+                badge.style.background  = "rgba(16,185,129,0.25)";
+                badge.style.borderColor = "#10b981";
+                setTimeout(() => {
+                    badge.style.background  = "rgba(16,185,129,0.1)";
+                    badge.style.borderColor = "rgba(16,185,129,0.3)";
+                }, 2000);
+            } else if (state === "error") {
+                text.textContent = "⚠ Cloud Sync Failed (local only)";
+                badge.style.background  = "rgba(239,68,68,0.2)";
+                badge.style.borderColor = "#ef4444";
+            } else if (state === "local") {
+                text.textContent = `💾 Saved Locally (${timeStr})`;
+                badge.style.background  = "rgba(16,185,129,0.1)";
+                badge.style.borderColor = "rgba(16,185,129,0.3)";
+            } else if (state === "offline") {
+                text.textContent = "📴 Offline Mode (no cloud URL set)";
+                badge.style.background  = "rgba(100,116,139,0.2)";
+                badge.style.borderColor = "#64748b";
+            }
+        }
+
+        /* ============================================================
            A. VIEW NAVIGATION SWITCHER (IN A SINGLE FILE)
         ============================================================ */
         let activePortalView = "attendance";
@@ -1983,7 +2080,7 @@
         let currentMonthStr = "";
         let daysInMonth = 30;
 
-        function initAttendance() {
+        async function initAttendance() {
             const now = new Date();
             const yyyy = now.getFullYear();
             const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -1991,9 +2088,10 @@
             const monthPicker = document.getElementById("month-picker");
             if (monthPicker) monthPicker.value = currentMonthStr;
 
+            // ── 1. Load from localStorage first (instant, works offline) ──
+            let parsedStaff = null;
             let savedStaff = localStorage.getItem(STORAGE_STAFF_KEY);
             if (!savedStaff) savedStaff = localStorage.getItem("AMS_STAFF_LIST_V5");
-            let parsedStaff = null;
             if (savedStaff) {
                 try { parsedStaff = JSON.parse(savedStaff); } catch(e) { parsedStaff = null; }
             }
@@ -2044,10 +2142,40 @@
                 catch(e) { attendanceData = {}; }
             }
 
+            // Render immediately with local data so the page feels fast
             renderAttendanceTable();
+
+            // ── 2. Then pull from Google Sheets (cloud) ──
+            if (cloudSyncEnabled) {
+                setCloudBadge("syncing");
+                const cloudData = await cloudLoad();
+                if (cloudData) {
+                    let changed = false;
+
+                    if (cloudData.staffList && Array.isArray(cloudData.staffList) && cloudData.staffList.length > 0) {
+                        staffList = cloudData.staffList;
+                        localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
+                        changed = true;
+                    }
+
+                    if (cloudData.attendanceData && typeof cloudData.attendanceData === 'object') {
+                        attendanceData = cloudData.attendanceData;
+                        localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(attendanceData));
+                        changed = true;
+                    }
+
+                    if (changed) renderAttendanceTable();
+                    setCloudBadge("saved");
+                } else {
+                    setCloudBadge("error");
+                }
+            } else {
+                setCloudBadge("offline");
+            }
         }
 
         function triggerAutoSave(customMsg) {
+            // 1. Always save to localStorage instantly
             if (attendanceData) {
                 localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(attendanceData));
             }
@@ -2055,18 +2183,24 @@
                 localStorage.setItem(STORAGE_STAFF_KEY, JSON.stringify(staffList));
             }
 
-            const badge = document.getElementById("autosave-indicator");
-            const textElem = document.getElementById("autosave-text");
-
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            textElem.textContent = customMsg || `Auto-Saved (${timeStr})`;
-            badge.style.background = "rgba(16, 185, 129, 0.25)";
-            badge.style.borderColor = "#10b981";
-
-            setTimeout(() => {
-                badge.style.background = "rgba(16, 185, 129, 0.1)";
-                badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-            }, 1000);
+            // 2. Then push to Google Sheets (debounced 2 s)
+            if (cloudSyncEnabled) {
+                cloudSave();
+            } else {
+                // Show local save badge
+                const badge = document.getElementById("autosave-indicator");
+                const textElem = document.getElementById("autosave-text");
+                if (badge && textElem) {
+                    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    textElem.textContent = customMsg || `💾 Saved Locally (${timeStr})`;
+                    badge.style.background  = "rgba(16, 185, 129, 0.25)";
+                    badge.style.borderColor = "#10b981";
+                    setTimeout(() => {
+                        badge.style.background  = "rgba(16, 185, 129, 0.1)";
+                        badge.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                    }, 1000);
+                }
+            }
         }
 
         function getDaysForSelectedMonth() {
